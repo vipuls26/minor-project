@@ -26,6 +26,7 @@ export const eventStore = defineStore('eventStore', {
     eventPayload(formData) {
       return {
         name: formData.name,
+        category: formData.category,
         location: formData.location,
         start_date: formData.start_date,
         end_date: formData.end_date,

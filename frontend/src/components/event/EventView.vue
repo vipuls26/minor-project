@@ -23,6 +23,7 @@
         <EventCard v-for="event in paginatedEvents" 
                 :key="event.id" 
                 :event="event" 
+                :show-timer="true"
                 @edit="openEditDialog"
                 @attendees="openAttendeeDialog" />
       </div>

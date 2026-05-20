@@ -18,25 +18,33 @@
           <button type="button"
             class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100"
             @click="emit('close')">
-            <i class="pi pi-times"></i> 
+            <i class="pi pi-times"></i>
           </button>
         </div>
 
         <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
-          <div class="space-y-2 md:col-span-2">
-            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name" icon="pi-calendar-plus"
-              :error="fieldError('name')" />
+          <div v-if="generalError"
+            class="md:col-span-2 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+            role="alert" aria-live="polite">
+            {{ generalError }}
+          </div>
 
+          <div class="space-y-2 md:col-span-2">
+            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name"
+              icon="pi-calendar-plus" :error="fieldError('name')" />
+
+          </div>
+
+          <div class="space-y-2">
+            <BaseStatusSelect id="category" label="Category" v-model="form.category" :options="categoryOptions" />
+            <p v-if="fieldError('category')" class="mt-1 text-sm text-red-600">
+              {{ fieldError('category') }}
+            </p>
           </div>
 
           <div class="space-y-2">
             <BaseInput id="location" label="Location" v-model="form.location" type="text" placeholder="Enter location"
               :error="fieldError('location')" icon="pi-map-marker" />
-          </div>
-
-          <div class="space-y-2">
-            <BaseInput id="capacity" label="Total Capacity" v-model="form.capacity" type="number" min="1" step="1"
-              :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
           </div>
 
           <div class="space-y-2">
@@ -49,7 +57,10 @@
               :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" />
           </div>
 
-
+          <div class="space-y-2">
+            <BaseInput id="capacity" label="Total Capacity" v-model="form.capacity" type="number" min="1" step="1"
+              :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
+          </div>
 
           <div v-if="isEditMode" class="space-y-2 md:col-span-2">
             <BaseStatusSelect id="status" v-model="form.status" />
@@ -93,6 +104,7 @@ const emit = defineEmits(['close', 'submit'])
 
 const form = reactive({
   name: '',
+  category: 'meetup',
   location: '',
   start_date: '',
   end_date: '',
@@ -104,9 +116,19 @@ const localErrors = ref({})
 const isEditMode = computed(() => props.mode === 'edit')
 const minimumStartDate = computed(() => toDateTimeLocal(new Date()))
 const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
+const generalError = computed(() => props.errors.general || '')
+const categoryOptions = [
+  { label: 'Conference', value: 'conference' },
+  { label: 'Workshop', value: 'workshop' },
+  { label: 'Meetup', value: 'meetup' },
+  { label: 'Webinar', value: 'webinar' },
+  { label: 'Hackathon', value: 'hackathon' },
+  { label: 'Social', value: 'social' },
+]
 
 const validationSchema = yup.object({
   name: yup.string().trim().required('Event name is required'),
+  category: yup.string().required('Category is required'),
   location: yup.string().trim().required('Location is required'),
   start_date: yup
     .string()
@@ -160,6 +182,7 @@ watch(
 
 function fillForm() {
   form.name = props.initialEvent?.name || ''
+  form.category = props.initialEvent?.category || 'meetup'
   form.location = props.initialEvent?.location || ''
   form.start_date = toDateTimeLocal(props.initialEvent?.start_date || '')
   form.end_date = toDateTimeLocal(props.initialEvent?.end_date || '')
@@ -178,6 +201,7 @@ async function submitForm() {
   localErrors.value = {}
   emit('submit', {
     name: form.name.trim(),
+    category: form.category,
     location: form.location.trim(),
     start_date: form.start_date,
     end_date: form.end_date,

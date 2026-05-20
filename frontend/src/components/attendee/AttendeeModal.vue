@@ -22,6 +22,15 @@
         <!-- form -->
         <form v-if="canRegister" class="mt-6 grid gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-800 sm:grid-cols-3"
           @submit.prevent="submitForm">
+          <div
+            v-if="generalError"
+            class="sm:col-span-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {{ generalError }}
+          </div>
+
           <div v-if="isEventFull" class="sm:col-span-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
             Registration is closed because this event has reached its capacity.
           </div>
@@ -54,6 +63,15 @@
 
         <!-- table of interested people -->
         <div v-if="showTable" class="mt-6">
+          <div
+            v-if="generalError && !canRegister"
+            class="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {{ generalError }}
+          </div>
+
           <div v-if="loadingList" class="py-6 text-center text-slate-500 dark:text-slate-400">
             <i class="pi pi-spin pi-spinner mr-2"></i>
           </div>
@@ -70,7 +88,19 @@
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                 <tr v-for="attendee in attendees" :key="attendee.id">
-                  <td class="px-4 py-3">{{ attendee.name }}</td>
+                  <td class="px-4 py-3">
+                    <div class="flex items-center gap-3">
+                      <span
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-xs font-bold uppercase tracking-[0.18em] text-sky-700 dark:bg-sky-500/15 dark:text-sky-300"
+                      >
+                        {{ attendeeInitials(attendee.name) }}
+                      </span>
+                      <div>
+                        <p class="font-semibold text-slate-900 dark:text-slate-100">{{ attendee.name }}</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Registered attendee</p>
+                      </div>
+                    </div>
+                  </td>
                   <td class="px-4 py-3">{{ attendee.email }}</td>
                   <td class="px-4 py-3">{{ attendee.mobile_no }}</td>
                 </tr>
@@ -287,5 +317,19 @@ function formatMessage(message) {
   }
 
   return message.charAt(0).toUpperCase() + message.slice(1)
+}
+
+function attendeeInitials(name) {
+  if (!name) {
+    return 'NA'
+  }
+
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0))
+    .join('')
+    .toUpperCase()
 }
 </script>

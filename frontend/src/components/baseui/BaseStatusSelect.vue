@@ -13,8 +13,9 @@
         @change="$emit('update:modelValue', $event.target.value)"
         class="min-w-0 w-full appearance-none border-0 bg-transparent px-4 py-2.5 pr-12 text-sm font-medium text-slate-700 outline-none [color-scheme:light] dark:bg-slate-900 dark:text-slate-100 dark:[color-scheme:dark]"
       >
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
+        <option v-for="option in options" :key="option.value" :value="option.value">
+          {{ option.label }}
+        </option>
       </select>
 
       <div
@@ -39,6 +40,13 @@ defineProps({
   modelValue: {
     type: String,
     default: ''
+  },
+  options: {
+    type: Array,
+    default: () => [
+      { label: 'Active', value: 'active' },
+      { label: 'Inactive', value: 'inactive' },
+    ]
   }
 })
 

@@ -20,6 +20,7 @@ class eventUpdate extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:30|string',
+            'category' => 'required|string|in:conference,workshop,meetup,webinar,hackathon,social',
             'location' => 'required|min:3|max:10|string',
             'start_date' => 'required|date|after:now',
             'end_date' => 'required|date|after:start_date',
@@ -34,6 +35,9 @@ class eventUpdate extends FormRequest
             'name.required' => 'Event name is required',
             'name.min' => 'Event name must be more than 3 character',
             'name.max' => 'Event name not be more than 30 character',
+
+            'category.required' => 'Event category is required',
+            'category.in' => 'Select a valid event category',
 
             'location.required' => 'Event location is required',
             'location.min' => 'Event location must be more than 3 character',
