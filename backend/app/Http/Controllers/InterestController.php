@@ -36,7 +36,7 @@ class InterestController extends Controller
 
         if ($isExist) {
             return response()->json([
-                'message' => 'this email is already register in this event.'
+                'message' => 'This email is already registered for this event.'
             ], 422);
         }
 

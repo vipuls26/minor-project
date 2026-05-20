@@ -38,10 +38,10 @@ describe('FormAdd', () => {
 
     await wrapper.get('form').trigger('submit.prevent')
 
-    expect(wrapper.text()).toContain('event name is required')
-    expect(wrapper.text()).toContain('location is required')
-    expect(wrapper.text()).toContain('start date is required')
-    expect(wrapper.text()).toContain('end date is required')
+    expect(wrapper.text()).toContain('Event name is required')
+    expect(wrapper.text()).toContain('Location is required')
+    expect(wrapper.text()).toContain('Start date is required')
+    expect(wrapper.text()).toContain('End date is required')
     expect(wrapper.emitted('submit')).toBeUndefined()
   })
 
@@ -104,7 +104,7 @@ describe('FormAdd', () => {
     const wrapper = await mountForm({
       errors: {
         fields: {
-          start_date: ['backend start date error'],
+          start_date: ['Backend start date error'],
         },
       },
     })
@@ -115,8 +115,8 @@ describe('FormAdd', () => {
     await wrapper.get('#end_date').setValue('2026-05-18T11:00')
     await wrapper.get('form').trigger('submit.prevent')
 
-    expect(wrapper.text()).toContain('start date must be in the future')
-    expect(wrapper.text()).not.toContain('backend start date error')
+    expect(wrapper.text()).toContain('Start date must be in the future')
+    expect(wrapper.text()).not.toContain('Backend start date error')
 
     vi.useRealTimers()
   })

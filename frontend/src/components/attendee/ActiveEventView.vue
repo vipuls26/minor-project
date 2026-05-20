@@ -8,7 +8,7 @@
       </div>
 
       <div v-else class="mt-10 space-y-6">
-        <div class="flex items-center">
+        <div v-if="upcomingEvents.length" class="flex items-center">
           <BaseEventFilterDropdown v-model="selectedFilter" :options="filterOptions" />
         </div>
 
@@ -80,6 +80,15 @@ const filterOptions = [
   { label: 'Next Week', value: 'next_week' },
 ]
 
+const upcomingEvents = computed(() => {
+  const now = new Date()
+
+  return store.activeEventList.filter((event) => {
+    const startDate = new Date(event.start_date)
+    return startDate > now
+  })
+})
+
 const filteredEvents = computed(() => {
   const now = new Date()
   const todayStart = startOfDay(now)
@@ -89,10 +98,10 @@ const filteredEvents = computed(() => {
   const nextWeekEnd = endOfDay(addDays(todayStart, 13))
 
   if (!selectedFilter.value || selectedFilter.value === 'all') {
-    return store.activeEventList
+    return upcomingEvents.value
   }
 
-  return store.activeEventList.filter((event) => {
+  return upcomingEvents.value.filter((event) => {
     const eventDate = new Date(event.start_date)
 
     if (selectedFilter.value === 'today') {
@@ -117,11 +126,11 @@ const totalPages = computed(() => {
 })
 
 const emptyStateMessage = computed(() => {
-  if (!store.activeEventList.length) {
-    return 'There are no active events right now.'
+  if (!upcomingEvents.value.length) {
+    return 'There are no upcoming events right now.'
   }
 
-  return 'No active events found.'
+  return 'No upcoming events found for the selected filter.'
 })
 
 const pageStart = computed(() => {

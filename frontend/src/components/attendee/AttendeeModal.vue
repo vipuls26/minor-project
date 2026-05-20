@@ -128,20 +128,20 @@ const validationSchema = yup.object({
   name: yup
     .string()
     .trim()
-    .required('name is required')
-    .min(3, 'name must be at least 3 characters')
-    .max(30, 'name must not exceed 30 characters'),
+    .required('Name is required')
+    .min(3, 'Name must be at least 3 characters')
+    .max(30, 'Name must not exceed 30 characters'),
   email: yup
     .string()
     .trim()
-    .required('email is required')
-    .email('email must be a valid email address')
-    .max(100, 'email must not exceed 100 characters'),
+    .required('Email is required')
+    .email('Email must be a valid email address')
+    .max(100, 'Email must not exceed 100 characters'),
   mobile_no: yup
     .string()
     .trim()
-    .required('mobile number is required')
-    .matches(/^\d{10}$/, 'mobile number must be exactly 10 digits'),
+    .required('Mobile number is required')
+    .matches(/^\d{10}$/, 'Mobile number must be exactly 10 digits'),
 })
 
 watch(
@@ -199,7 +199,7 @@ async function submitForm() {
     attendeeCount.value = attendees.value.length
     syncEventInterestCount(attendeeCount.value)
     resetForm()
-    store.showMessage('success', 'registeration complete successfully')
+    store.showMessage('success', 'Registration completed successfully')
     emit('close')
 
 
@@ -207,7 +207,7 @@ async function submitForm() {
     generalError.value = getErrorMessage(error)
     fieldErrors.value = error.response?.data?.errors || {}
 
-    if (!fieldErrors.value.email && generalError.value === 'this email is already register in this event.') {
+    if (!fieldErrors.value.email && generalError.value === 'This email is already registered for this event.') {
       fieldErrors.value = {
         ...fieldErrors.value,
         email: generalError.value,
@@ -274,10 +274,18 @@ function syncEventInterestCount(count) {
 
 function fieldError(fieldName) {
   const error = fieldErrors.value[fieldName]
-  return Array.isArray(error) ? error[0] : error
+  return formatMessage(Array.isArray(error) ? error[0] : error)
 }
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Something went wrong'
+  return formatMessage(error.response?.data?.message || error.message || 'Something went wrong')
+}
+
+function formatMessage(message) {
+  if (typeof message !== 'string' || !message.length) {
+    return message
+  }
+
+  return message.charAt(0).toUpperCase() + message.slice(1)
 }
 </script>

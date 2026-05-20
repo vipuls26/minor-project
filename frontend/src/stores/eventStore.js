@@ -12,7 +12,15 @@ export const eventStore = defineStore('eventStore', {
 
   actions: {
     showMessage(type, message) {
-      notify(type, message)
+      notify(type, this.formatMessage(message))
+    },
+
+    formatMessage(message) {
+      if (typeof message !== 'string' || !message.length) {
+        return message
+      }
+
+      return message.charAt(0).toUpperCase() + message.slice(1)
     },
 
     eventPayload(formData) {
@@ -27,7 +35,7 @@ export const eventStore = defineStore('eventStore', {
     },
 
     getErrorMessage(error) {
-      return error.response?.data?.message || error.message || 'Something went wrong'
+      return this.formatMessage(error.response?.data?.message || error.message || 'Something went wrong')
     },
 
     getValidationErrors(error) {

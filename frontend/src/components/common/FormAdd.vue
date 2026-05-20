@@ -18,13 +18,13 @@
           <button type="button"
             class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100"
             @click="emit('close')">
-            <i class="pi pi-times"></i>
+            <i class="pi pi-times"></i> 
           </button>
         </div>
 
         <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
           <div class="space-y-2 md:col-span-2">
-            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name" icon="pi-bell"
+            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name" icon="pi-calendar-plus"
               :error="fieldError('name')" />
 
           </div>
@@ -41,12 +41,12 @@
 
           <div class="space-y-2">
             <BaseInput id="start_date" label="Start Date" v-model="form.start_date" type="datetime-local"
-              :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-calendar-plus" />
+              :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-clock" />
           </div>
 
           <div class="space-y-2">
             <BaseInput id="end_date" label="End Date" v-model="form.end_date" type="datetime-local"
-              :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-calendar-plus" />
+              :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" />
           </div>
 
 
@@ -106,12 +106,12 @@ const minimumStartDate = computed(() => toDateTimeLocal(new Date()))
 const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
 
 const validationSchema = yup.object({
-  name: yup.string().trim().required('event name is required'),
-  location: yup.string().trim().required('location is required'),
+  name: yup.string().trim().required('Event name is required'),
+  location: yup.string().trim().required('Location is required'),
   start_date: yup
     .string()
-    .required('start date is required')
-    .test('is-future-date', 'start date must be in the future', (value) => {
+    .required('Start date is required')
+    .test('is-future-date', 'Start date must be in the future', (value) => {
       if (!value) {
         return false
       }
@@ -120,8 +120,8 @@ const validationSchema = yup.object({
     }),
   end_date: yup
     .string()
-    .required('end date is required')
-    .test('is-after-start-date', 'end date must be after the start date', (value) => {
+    .required('End date is required')
+    .test('is-after-start-date', 'End date must be after the start date', (value) => {
       if (!value) {
         return false
       }
@@ -134,10 +134,10 @@ const validationSchema = yup.object({
     }),
   capacity: yup
     .number()
-    .typeError('capacity must be a number')
-    .integer('capacity must be a whole number')
-    .min(1, 'minimum capacity must be at least 1')
-    .required('capacity is required'),
+    .typeError('Capacity must be a number')
+    .integer('Capacity must be a whole number')
+    .min(1, 'Minimum capacity must be at least 1')
+    .required('Capacity is required'),
 })
 
 watch(
@@ -214,7 +214,15 @@ function fieldError(fieldName) {
     return localErrors.value[fieldName]
   }
 
-  return Array.isArray(backendError) ? backendError[0] : backendError
+  return formatMessage(Array.isArray(backendError) ? backendError[0] : backendError)
+}
+
+function formatMessage(message) {
+  if (typeof message !== 'string' || !message.length) {
+    return message
+  }
+
+  return message.charAt(0).toUpperCase() + message.slice(1)
 }
 
 function isFutureDateTime(value) {

@@ -10,9 +10,9 @@
 
         <div class="flex justify-between items-center gap-4">
           <button type="button"
-            class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white p-3 text-slate-700 transition hover:border-sky-300 hover:text-sky-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
+            class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white p-3 text-slate-700 transition hover:border-sky-300 hover:text-sky-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400 gap-2"
             @click="openCreateDialog">
-            <i class="pi pi-file-plus" style="font-size: 1.5rem;"></i>
+            <i class="pi pi-plus" ></i> New Event
           </button>
         
           <BaseEventFilterDropdown v-model="selectedFilter" :options="filterOptions" />

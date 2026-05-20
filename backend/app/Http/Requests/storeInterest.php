@@ -37,18 +37,18 @@ class storeInterest extends FormRequest
     public function messages()
     {
         return[
-            'name.required' => 'name is required',
-            'name.min' => 'name must be at least 3 characters',
-            'name.max' => 'name must not exceed 30 characters',
-            'name.string' => 'name must be in string format',
+            'name.required' => 'Name is required',
+            'name.min' => 'Name must be at least 3 characters',
+            'name.max' => 'Name must not exceed 30 characters',
+            'name.string' => 'Name must be in string format',
 
 
-            'email.required' => 'email is required',
-            'email.email' => 'email must be a valid email address',
-            'email.unique' => 'register using another email address',
+            'email.required' => 'Email is required',
+            'email.email' => 'Email must be a valid email address',
+            'email.unique' => 'Register using another email address',
 
-            'mobile_no.required' => 'mobile number is required',
-            'mobile_no.min' => 'mobile number not more than 10 digit'
+            'mobile_no.required' => 'Mobile number is required',
+            'mobile_no.min' => 'Mobile number not more than 10 digit'
 
         ];
     }

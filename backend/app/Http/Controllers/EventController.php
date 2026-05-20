@@ -40,7 +40,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         if (!$event) {
-            return response()->json(['message' => 'event not found'], 404);
+            return response()->json(['message' => 'Event not found'], 404);
         }
         $event->interests()->delete();
         $event->delete();
@@ -49,7 +49,12 @@ class EventController extends Controller
 
     public function activeEvent()
     {
-        $activeEvents = Event::withCount('interests')->where('status', 'active')->latest()->get();
+        $activeEvents = Event::withCount('interests')
+            ->where('status', 'active')
+            ->where('end_date', '>', now())
+            ->latest()
+            ->get();
+
         return response()->json($activeEvents);
     }
 }
