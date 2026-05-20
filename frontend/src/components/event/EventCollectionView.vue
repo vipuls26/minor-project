@@ -1,16 +1,32 @@
 <template>
-  <section class="min-h-[calc(100vh-140px)] bg-slate-100 py-16 transition-colors duration-300 dark:bg-slate-950">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div v-if="loading" class="flex justify-center px-10">
-        <i class="pi pi-spin pi-spinner text-2xl"></i>
+  <section class="min-h-[calc(100vh-140px)] bg-slate-100 py-12 transition-colors duration-300 dark:bg-slate-950">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div v-if="loading" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div
+          v-for="skeleton in itemsPerPage"
+          :key="skeleton"
+          class="overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white/90 p-6 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.3)] dark:border-slate-800/80 dark:bg-slate-900/90"
+        >
+          <div class="space-y-4">
+            <div class="skeleton-shimmer h-4 w-24 rounded-full"></div>
+            <div class="skeleton-shimmer h-8 w-3/4 rounded-2xl"></div>
+            <div class="skeleton-shimmer h-4 w-full rounded-xl"></div>
+            <div class="skeleton-shimmer h-4 w-5/6 rounded-xl"></div>
+            <div class="grid gap-3 pt-2">
+              <div class="skeleton-shimmer h-16 rounded-2xl"></div>
+              <div class="skeleton-shimmer h-16 rounded-2xl"></div>
+              <div class="skeleton-shimmer h-16 rounded-2xl"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div v-else class="mt-10 space-y-6">
-        <div class="flex items-center justify-between gap-4">
+      <div v-else class="mt-8 space-y-8">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <button
             v-if="showCreateButton"
             type="button"
-            class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white p-3 text-slate-700 transition hover:border-sky-300 hover:text-sky-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
+            class="inline-flex items-center justify-center gap-2 self-start rounded-full border border-slate-200/80 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-700 shadow-[0_16px_34px_-24px_rgba(15,23,42,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01] hover:border-sky-300 hover:text-sky-600 dark:border-slate-700/80 dark:bg-slate-900/90 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
             @click="$emit('create')"
           >
             <i class="pi pi-calendar-plus"></i> {{ createButtonLabel }}
@@ -21,7 +37,7 @@
           </div>
         </div>
 
-        <div v-if="paginatedEvents.length" class="grid gap-6 lg:grid-cols-3">
+        <div v-if="paginatedEvents.length" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <EventCard
             v-for="event in paginatedEvents"
             :key="event.id"
@@ -44,14 +60,14 @@
 
         <div
           v-if="paginatedEvents.length && totalPages > 1"
-          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          class="flex flex-col items-center justify-center gap-4 pt-2"
         >
           <p class="text-sm text-slate-500 dark:text-slate-400">Page {{ currentPage }} of {{ totalPages }}</p>
 
-          <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center gap-3 rounded-full border border-slate-200/80 bg-white/85 px-3 py-3 shadow-[0_18px_38px_-26px_rgba(15,23,42,0.45)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/85">
             <button
               type="button"
-              class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
               :disabled="currentPage === 1"
               @click="goToPreviousPage"
             >
@@ -60,7 +76,7 @@
 
             <button
               type="button"
-              class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
               :disabled="currentPage === totalPages"
               @click="goToNextPage"
             >

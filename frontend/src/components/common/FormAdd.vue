@@ -1,75 +1,84 @@
 <template>
   <Teleport to="body">
-    <div v-if="isOpen"
-      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/45 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
-      @click.self="emit('close')">
-      <div
-        class="w-full max-w-xl overflow-y-auto rounded-3xl bg-white p-4 shadow-2xl max-sm:max-h-[calc(100vh-2rem)] dark:bg-slate-900 sm:p-6 sm:max-h-[calc(100vh-3rem)]">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
-              {{ isEditMode ? 'Update Event' : 'New Event' }}
-            </p>
-            <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
-              {{ isEditMode ? 'Edit event details' : 'Add event details' }}
-            </h2>
+    <Transition name="modal-fade">
+      <div v-if="isOpen"
+        class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/55 px-3 py-4 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6"
+        @click.self="emit('close')">
+        <Transition name="modal-scale" appear>
+          <div
+            v-if="isOpen"
+            class="w-full max-w-xl overflow-y-auto rounded-[2rem] border border-white/50 bg-white/95 shadow-[0_32px_80px_-32px_rgba(15,23,42,0.55)] max-sm:max-h-[calc(100vh-1.5rem)] dark:border-slate-700/70 dark:bg-slate-900/95 sm:max-h-[calc(100vh-3rem)]">
+            <div class="p-5 sm:p-7">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
+                    {{ isEditMode ? 'Update Event' : 'New Event' }}
+                  </p>
+                  <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+                    {{ isEditMode ? 'Edit event details' : 'Add event details' }}
+                  </h2>
+                </div>
+
+                <button type="button"
+                  class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-500 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100"
+                  @click="emit('close')">
+                  <i class="pi pi-times"></i>
+                </button>
+              </div>
+
+              <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
+                <div class="space-y-2 md:col-span-2">
+                  <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name"
+                    icon="pi-calendar-plus" :error="fieldError('name')" />
+
+                </div>
+
+                <div class="space-y-2">
+                  <BaseInput id="location" label="Location" v-model="form.location" type="text" placeholder="Enter location"
+                    :error="fieldError('location')" icon="pi-map-marker" />
+                </div>
+
+                <div class="space-y-2">
+                  <BaseInput id="capacity" label="Total Capacity" v-model="form.capacity" type="number" min="1" step="1"
+                    :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
+                </div>
+
+                <div class="space-y-2">
+                  <BaseInput id="start_date" label="Start Date" v-model="form.start_date" type="datetime-local"
+                    :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-clock" />
+                </div>
+
+                <div class="space-y-2">
+                  <BaseInput id="end_date" label="End Date" v-model="form.end_date" type="datetime-local"
+                    :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" />
+                </div>
+
+                <div v-if="isEditMode" class="space-y-2 md:col-span-2">
+                  <BaseSelectDropdown id="status" v-model="form.status" />
+                </div>
+
+
+                <div class="sticky bottom-0 -mx-5 mt-2 border-t border-slate-200/80 bg-white/92 px-5 py-4 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 dark:border-slate-800/80 dark:bg-slate-900/95 sm:dark:bg-transparent md:col-span-2">
+                  <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                    <button type="button"
+                      class="w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-300 sm:w-auto sm:px-5 sm:text-base dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:bg-slate-800"
+                      @click="emit('close')">
+                      Cancel
+                    </button>
+
+                    <button type="submit"
+                      class="w-full rounded-2xl bg-sky-600 px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_38px_-20px_rgba(2,132,199,0.65)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-sky-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-5 sm:text-base"
+                      :disabled="loading">
+                      {{ loading ? 'Saving...' : isEditMode ? 'Update Event' : 'Create Event' }}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
-
-          <button type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100"
-            @click="emit('close')">
-            <i class="pi pi-times"></i>
-          </button>
-        </div>
-
-        <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
-          <div class="space-y-2 md:col-span-2">
-            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name"
-              icon="pi-calendar-plus" :error="fieldError('name')" />
-
-          </div>
-
-          <div class="space-y-2">
-            <BaseInput id="location" label="Location" v-model="form.location" type="text" placeholder="Enter location"
-              :error="fieldError('location')" icon="pi-map-marker" />
-          </div>
-
-          <div class="space-y-2">
-            <BaseInput id="capacity" label="Total Capacity" v-model="form.capacity" type="number" min="1" step="1"
-              :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
-          </div>
-
-          <div class="space-y-2">
-            <BaseInput id="start_date" label="Start Date" v-model="form.start_date" type="datetime-local"
-              :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-clock" />
-          </div>
-
-          <div class="space-y-2">
-            <BaseInput id="end_date" label="End Date" v-model="form.end_date" type="datetime-local"
-              :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" />
-          </div>
-
-          <div v-if="isEditMode" class="space-y-2 md:col-span-2">
-            <BaseSelectDropdown id="status" v-model="form.status" />
-          </div>
-
-
-          <div class="flex flex-col gap-3 pt-2 md:col-span-2 sm:flex-row sm:justify-end">
-            <button type="button"
-              class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 sm:w-auto sm:px-5 sm:py-3 sm:text-base dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-              @click="emit('close')">
-              Cancel
-            </button>
-
-            <button type="submit"
-              class="w-full rounded-xl bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-5 sm:py-3 sm:text-base"
-              :disabled="loading">
-              {{ loading ? 'Saving...' : isEditMode ? 'Update Event' : 'Create Event' }}
-            </button>
-          </div>
-        </form>
+        </Transition>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 </template>
 

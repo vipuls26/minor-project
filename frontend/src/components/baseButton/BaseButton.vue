@@ -15,12 +15,12 @@ const props = defineProps({
 
 const buttonClasses = computed(() => {
   const baseClasses =
-    'px-5 py-2.5 rounded-4xl font-semibold text-sm shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2'
+    'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold shadow-[0_14px_32px_-18px_rgba(15,23,42,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01] active:translate-y-0 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-3 disabled:cursor-not-allowed disabled:opacity-70'
 
   const variants = {
-    primary: 'bg-blue-500 text-white hover:bg-blue-700 focus-visible:outline-blue-600',
-    secondary: 'bg-yellow-500 text-white hover:bg-yellow-700 focus-visible:outline-yellow-600',
-    tertiary: 'bg-red-400 text-white hover:bg-red-600 focus-visible:outline-red-500 p-2',
+    primary: 'bg-sky-600 text-white hover:bg-sky-700 focus-visible:outline-sky-500',
+    secondary: 'bg-amber-500 text-white hover:bg-amber-600 focus-visible:outline-amber-500',
+    tertiary: 'bg-rose-500 px-3 py-3 text-white hover:bg-rose-600 focus-visible:outline-rose-500',
   }
 
   return `${baseClasses} ${variants[props.variant] || variants.primary}`
