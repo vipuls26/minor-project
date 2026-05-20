@@ -106,12 +106,12 @@ const minimumStartDate = computed(() => toDateTimeLocal(new Date()))
 const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
 
 const validationSchema = yup.object({
-  name: yup.string().trim().required('event name is required'),
-  location: yup.string().trim().required('location is required'),
+  name: yup.string().trim().required('Event name is required'),
+  location: yup.string().trim().required('Location is required'),
   start_date: yup
     .string()
-    .required('start date is required')
-    .test('is-future-date', 'start date must be in the future', (value) => {
+    .required('Start date is required')
+    .test('is-future-date', 'Start date must be in the future', (value) => {
       if (!value) {
         return false
       }
@@ -120,8 +120,8 @@ const validationSchema = yup.object({
     }),
   end_date: yup
     .string()
-    .required('end date is required')
-    .test('is-after-start-date', 'end date must be after the start date', (value) => {
+    .required('End date is required')
+    .test('is-after-start-date', 'End date must be after the start date', (value) => {
       if (!value) {
         return false
       }
@@ -134,10 +134,10 @@ const validationSchema = yup.object({
     }),
   capacity: yup
     .number()
-    .typeError('capacity must be a number')
-    .integer('capacity must be a whole number')
-    .min(1, 'minimum capacity must be at least 1')
-    .required('capacity is required'),
+    .typeError('Capacity must be a number')
+    .integer('Capacity must be a whole number')
+    .min(1, 'Minimum capacity must be at least 1')
+    .required('Capacity is required'),
 })
 
 watch(
