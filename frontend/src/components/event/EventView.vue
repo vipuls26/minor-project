@@ -15,7 +15,7 @@
             <i class="pi pi-file-plus" style="font-size: 1.5rem;"></i>
           </button>
         
-          <BaseDropDown v-model="selectedFilter" :options="filterOptions" />
+          <BaseEventFilterDropdown v-model="selectedFilter" :options="filterOptions" />
         
       </div>
 
@@ -72,7 +72,7 @@
 import { eventStore } from '@/stores/eventStore'
 import { computed, onMounted, ref, watch } from 'vue'
 import AttendeeModal from '../attendee/AttendeeModal.vue'
-import BaseDropDown from '../baseui/baseDropDown.vue'
+import BaseEventFilterDropdown from '../baseui/BaseEventFilterDropdown.vue'
 import EventCard from './EventCard.vue'
 import FormAdd from '../common/FormAdd.vue'
 

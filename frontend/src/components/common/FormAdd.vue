@@ -52,7 +52,7 @@
 
 
           <div v-if="isEditMode" class="space-y-2 md:col-span-2">
-            <BaseSelectDropdown id="status" v-model="form.status" />
+            <BaseStatusSelect id="status" v-model="form.status" />
           </div>
 
           <div class="flex flex-col gap-3 pt-2 md:col-span-2 sm:flex-row sm:justify-end">
@@ -78,7 +78,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import * as yup from 'yup'
 
 import BaseInput from '../baseui/baseInput.vue'
-import BaseSelectDropdown from '../baseui/baseSelectDropdown.vue'
+import BaseStatusSelect from '../baseui/BaseStatusSelect.vue'
 
 
 const props = defineProps({

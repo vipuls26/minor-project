@@ -47,7 +47,7 @@
             <button type="submit"
               class="rounded-2xl bg-sky-600 px-5 py-3 font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="loading || isEventFull">
-              {{ loading ? 'Saving...' : isEventFull ? 'Event Full' : 'Register Attendee' }}
+              {{ loading ? 'Saving...' : isEventFull ? 'Capacity Reached' : 'Register Attendee' }}
             </button>
           </div>
         </form>

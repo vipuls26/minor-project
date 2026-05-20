@@ -41,26 +41,31 @@
 
       <div class="grid gap-3 text-sm text-slate-700 dark:text-slate-300 sm:grid-cols-2">
         <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800">
+          <i class="pi pi-map-marker text-sky-600 dark:text-sky-400"></i>
           <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Location</p>
           <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">{{ event.location }}</p>
         </div>
 
         <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800">
+          <i class="pi pi-calendar text-sky-600 dark:text-sky-400"></i>
           <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Start Date</p>
           <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">{{ event.start_date.split('T')[0] }}</p>
         </div>
 
         <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800">
+          <i class="pi pi-users text-sky-600 dark:text-sky-400"></i>
           <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Registrations</p>
           <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">{{ registrationSummary }}</p>
         </div>
 
         <div v-if="showDate" class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800">
+          <i class="pi pi-clock text-sky-600 dark:text-sky-400"></i>
           <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Created</p>
           <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">{{ event.created_at.split('T')[0] }}</p>
         </div>
 
         <div v-if="showDate" class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800">
+          <i class="pi pi-refresh text-sky-600 dark:text-sky-400"></i>
           <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Updated</p>
           <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">{{ event.updated_at.split('T')[0] }}</p>
         </div>
@@ -167,7 +172,7 @@ const isInterestDisabled = computed(() => {
 
 const interestButtonLabel = computed(() => {
   if (isEventFull.value) {
-    return 'Event Full'
+    return 'Capacity Reached'
   }
 
   if (eventStatus.value === 'started') {

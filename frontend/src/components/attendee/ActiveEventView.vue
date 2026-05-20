@@ -9,7 +9,7 @@
 
       <div v-else class="mt-10 space-y-6">
         <div class="flex items-center">
-          <BaseDropDown v-model="selectedFilter" :options="filterOptions" />
+          <BaseEventFilterDropdown v-model="selectedFilter" :options="filterOptions" />
         </div>
 
         <div v-if="filteredEvents.length" class="grid gap-6 lg:grid-cols-3">
@@ -65,7 +65,7 @@ import { eventStore } from '@/stores/eventStore'
 import { computed, onMounted, ref, watch } from 'vue'
 import AttendeeModal from './AttendeeModal.vue'
 import EventCard from '../event/EventCard.vue'
-import BaseDropDown from '../baseui/baseDropDown.vue'
+import BaseEventFilterDropdown from '../baseui/BaseEventFilterDropdown.vue'
 
 const store = eventStore()
 const isInterestFormOpen = ref(false)
