@@ -27,6 +27,15 @@
               </div>
 
               <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
+                <div
+                  v-if="generalError"
+                  class="md:col-span-2 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+                  role="alert"
+                  aria-live="polite"
+                >
+                  {{ generalError }}
+                </div>
+
                 <div class="space-y-2 md:col-span-2">
                   <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name"
                     icon="pi-calendar-plus" :error="fieldError('name')" />
@@ -113,6 +122,7 @@ const localErrors = ref({})
 const isEditMode = computed(() => props.mode === 'edit')
 const minimumStartDate = computed(() => toDateTimeLocal(new Date()))
 const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
+const generalError = computed(() => props.errors.general || '')
 
 const validationSchema = yup.object({
   name: yup.string().trim().required('Event name is required'),

@@ -22,6 +22,15 @@
         <!-- form -->
         <form v-if="canRegister" class="mt-6 grid gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-800 sm:grid-cols-3"
           @submit.prevent="submitForm">
+          <div
+            v-if="generalError"
+            class="sm:col-span-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {{ generalError }}
+          </div>
+
           <div v-if="isEventFull" class="sm:col-span-3 rounded-2xl border border-amber-300 bg-amber-100 px-4 py-3 text-sm font-semibold text-amber-950 dark:border-amber-700/70 dark:bg-amber-950/70 dark:text-amber-100">
             Full capacity reached. Registration is closed.
           </div>
@@ -54,6 +63,15 @@
 
         <!-- table of interested people -->
         <div v-if="showTable" class="mt-6">
+          <div
+            v-if="generalError && !canRegister"
+            class="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {{ generalError }}
+          </div>
+
           <div v-if="loadingList" class="py-6 text-center text-slate-500 dark:text-slate-400">
             <i class="pi pi-spin pi-spinner mr-2"></i>
           </div>

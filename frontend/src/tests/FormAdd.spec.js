@@ -38,10 +38,10 @@ describe('FormAdd', () => {
 
     await wrapper.get('form').trigger('submit.prevent')
 
-    expect(wrapper.text()).toContain('event name is required')
-    expect(wrapper.text()).toContain('location is required')
-    expect(wrapper.text()).toContain('start date is required')
-    expect(wrapper.text()).toContain('end date is required')
+    expect(wrapper.text()).toContain('Event name is required')
+    expect(wrapper.text()).toContain('Location is required')
+    expect(wrapper.text()).toContain('Start date is required')
+    expect(wrapper.text()).toContain('End date is required')
     expect(wrapper.emitted('submit')).toBeUndefined()
   })
 
@@ -115,9 +115,20 @@ describe('FormAdd', () => {
     await wrapper.get('#end_date').setValue('2026-05-18T11:00')
     await wrapper.get('form').trigger('submit.prevent')
 
-    expect(wrapper.text()).toContain('start date must be in the future')
+    expect(wrapper.text()).toContain('Start date must be in the future')
     expect(wrapper.text()).not.toContain('backend start date error')
 
     vi.useRealTimers()
+  })
+
+  it('renders backend general errors inline inside the modal', async () => {
+    const wrapper = await mountForm({
+      errors: {
+        general: 'Unable to save event right now.',
+      },
+    })
+
+    expect(wrapper.text()).toContain('Unable to save event right now.')
+    expect(wrapper.get('[role="alert"]').text()).toContain('Unable to save event right now.')
   })
 })
