@@ -22,8 +22,8 @@
         <!-- form -->
         <form v-if="canRegister" class="mt-6 grid gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-800 sm:grid-cols-3"
           @submit.prevent="submitForm">
-          <div v-if="isEventFull" class="sm:col-span-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
-            Registration is closed because this event has reached its capacity.
+          <div v-if="isEventFull" class="sm:col-span-3 rounded-2xl border border-amber-300 bg-amber-100 px-4 py-3 text-sm font-semibold text-amber-950 dark:border-amber-700/70 dark:bg-amber-950/70 dark:text-amber-100">
+            Full capacity reached. Registration is closed.
           </div>
 
           <div>
@@ -47,7 +47,7 @@
             <button type="submit"
               class="rounded-2xl bg-sky-600 px-5 py-3 font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="loading || isEventFull">
-              {{ loading ? 'Saving...' : isEventFull ? 'Event Full' : 'Register Attendee' }}
+              {{ loading ? 'Saving...' : isEventFull ? 'Fully Booked' : 'Register Attendee' }}
             </button>
           </div>
         </form>
@@ -90,7 +90,6 @@
 </template>
 
 <script setup>
-import apiUrl from '@/api/axios'
 import { eventStore } from '@/stores/eventStore'
 import { computed, reactive, ref, watch } from 'vue'
 import * as yup from 'yup'
@@ -107,8 +106,6 @@ const emit = defineEmits(['close'])
 
 const store = eventStore()
 const attendees = ref([])
-const loading = ref(false)
-const loadingList = ref(false)
 const generalError = ref('')
 const fieldErrors = ref({})
 const attendeeCount = ref(Number(props.event?.interests_count || 0))
@@ -123,25 +120,27 @@ const eventCapacity = computed(() => Number(props.event?.capacity || 0))
 const isEventFull = computed(() => {
   return eventCapacity.value > 0 && attendeeCount.value >= eventCapacity.value
 })
+const loading = computed(() => store.requests.createInterest)
+const loadingList = computed(() => store.requests.fetchInterests)
 
 const validationSchema = yup.object({
   name: yup
     .string()
     .trim()
-    .required('name is required')
-    .min(3, 'name must be at least 3 characters')
-    .max(30, 'name must not exceed 30 characters'),
+    .required('Name is required')
+    .min(3, 'Name must be at least 3 characters')
+    .max(30, 'Name must not exceed 30 characters'),
   email: yup
     .string()
     .trim()
-    .required('email is required')
-    .email('email must be a valid email address')
-    .max(100, 'email must not exceed 100 characters'),
+    .required('Email is required')
+    .email('Email must be a valid email address')
+    .max(100, 'Email must not exceed 100 characters'),
   mobile_no: yup
     .string()
     .trim()
-    .required('mobile number is required')
-    .matches(/^\d{10}$/, 'mobile number must be exactly 10 digits'),
+    .required('Mobile number is required')
+    .matches(/^\d{10}$/, 'Mobile number must be exactly 10 digits'),
 })
 
 watch(
@@ -155,22 +154,20 @@ watch(
 )
 
 async function loadAttendees() {
-  loadingList.value = true
   generalError.value = ''
 
-  try {
-    const response = await apiUrl.get(`events/${props.event.id}/interests`)
-    attendees.value = response.data
-    attendeeCount.value = response.data.length
+  const result = await store.fetchInterests(props.event.id)
+
+  if (result.ok) {
+    attendees.value = result.data
+    attendeeCount.value = result.data.length
     syncEventInterestCount(attendeeCount.value)
-  } catch (error) {
-    generalError.value = getErrorMessage(error)
-    attendees.value = []
-    attendeeCount.value = Number(props.event?.interests_count || 0)
-    store.showMessage('error', generalError.value)
-  } finally {
-    loadingList.value = false
+    return
   }
+
+  generalError.value = result.message
+  attendees.value = []
+  attendeeCount.value = Number(props.event?.interests_count || 0)
 }
 
 async function submitForm() {
@@ -186,43 +183,35 @@ async function submitForm() {
     return
   }
 
-  loading.value = true
+  const result = await store.createInterest(props.event.id, {
+    name: form.name.trim(),
+    email: form.email.trim(),
+    mobile_no: form.mobile_no.trim(),
+  })
 
-  try {
-    const response = await apiUrl.post(`events/${props.event.id}/interests`, {
-      name: form.name.trim(),
-      email: form.email.trim(),
-      mobile_no: form.mobile_no.trim(),
-    })
-
-    attendees.value.unshift(response.data)
+  if (result.ok) {
+    attendees.value.unshift(result.data)
     attendeeCount.value = attendees.value.length
     syncEventInterestCount(attendeeCount.value)
     resetForm()
-    store.showMessage('success', 'registeration complete successfully')
     emit('close')
-
-
-  } catch (error) {
-    generalError.value = getErrorMessage(error)
-    fieldErrors.value = error.response?.data?.errors || {}
-
-    if (!fieldErrors.value.email && generalError.value === 'this email is already register in this event.') {
-      fieldErrors.value = {
-        ...fieldErrors.value,
-        email: generalError.value,
-      }
-    }
-
-    if (generalError.value === 'Event capacity has been reached.') {
-      attendeeCount.value = eventCapacity.value
-      syncEventInterestCount(attendeeCount.value)
-    }
-
-    store.showMessage('error', generalError.value)
+    return
   }
 
-  loading.value = false
+  generalError.value = result.message
+  fieldErrors.value = result.errors || {}
+
+  if (!fieldErrors.value.email && generalError.value === 'this email is already register in this event.') {
+    fieldErrors.value = {
+      ...fieldErrors.value,
+      email: generalError.value,
+    }
+  }
+
+  if (generalError.value === 'Event capacity has been reached.') {
+    attendeeCount.value = eventCapacity.value
+    syncEventInterestCount(attendeeCount.value)
+  }
 }
 
 async function validateForm() {
@@ -262,22 +251,11 @@ function syncEventInterestCount(count) {
     return
   }
 
-  const updateCount = (event) => {
-    if (event.id === props.event.id) {
-      event.interests_count = count
-    }
-  }
-
-  store.activeEventList.forEach(updateCount)
-  store.eventsData.forEach(updateCount)
+  store.syncInterestCount(props.event.id, count)
 }
 
 function fieldError(fieldName) {
   const error = fieldErrors.value[fieldName]
   return Array.isArray(error) ? error[0] : error
-}
-
-function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Something went wrong'
 }
 </script>

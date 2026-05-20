@@ -15,3 +15,69 @@ html.dark {
 body {
   @apply bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
 }
+
+select,
+option,
+optgroup {
+  color-scheme: light;
+}
+
+.dark select,
+.dark option,
+.dark optgroup {
+  color-scheme: dark;
+}
+
+.swal2-popup {
+  @apply rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl;
+}
+
+.swal2-title {
+  @apply text-slate-900;
+}
+
+.swal2-html-container {
+  @apply text-slate-600;
+}
+
+.swal2-confirm,
+.swal2-cancel {
+  @apply rounded-xl font-semibold;
+}
+
+.dark .swal2-popup {
+  @apply border-slate-700 bg-slate-900 text-slate-100;
+}
+
+.dark .swal2-title {
+  @apply text-slate-100;
+}
+
+.dark .swal2-html-container {
+  @apply text-slate-300;
+}
+
+.dark .swal2-close {
+  @apply text-slate-400;
+}
+
+.vc-popover-content-wrapper .vc-popover-content,
+.vc-popover-content-wrapper .vc-nav-container {
+  @apply rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-xl;
+}
+
+.dark .vc-popover-content-wrapper .vc-popover-content,
+.dark .vc-popover-content-wrapper .vc-nav-container {
+  @apply border-slate-700 bg-slate-900 text-slate-100 shadow-black/30;
+}
+
+.dark .vc-popover-content-wrapper .vc-nav-arrow,
+.dark .vc-popover-content-wrapper .vc-nav-title,
+.dark .vc-popover-content-wrapper .vc-nav-item,
+.dark .vc-popover-content-wrapper .vc-day-popover-row-content {
+  @apply text-slate-200;
+}
+
+.dark .vc-popover-content-wrapper .vc-highlight {
+  opacity: 0.92;
+}

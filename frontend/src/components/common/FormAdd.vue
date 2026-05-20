@@ -24,8 +24,8 @@
 
         <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
           <div class="space-y-2 md:col-span-2">
-            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name" icon="pi-bell"
-              :error="fieldError('name')" />
+            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name"
+              icon="pi-calendar-plus" :error="fieldError('name')" />
 
           </div>
 
@@ -41,28 +41,28 @@
 
           <div class="space-y-2">
             <BaseInput id="start_date" label="Start Date" v-model="form.start_date" type="datetime-local"
-              :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-calendar-plus" />
+              :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-clock" />
           </div>
 
           <div class="space-y-2">
             <BaseInput id="end_date" label="End Date" v-model="form.end_date" type="datetime-local"
-              :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-calendar-plus" />
+              :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" />
           </div>
-
-
 
           <div v-if="isEditMode" class="space-y-2 md:col-span-2">
             <BaseSelectDropdown id="status" v-model="form.status" />
           </div>
 
+
           <div class="flex flex-col gap-3 pt-2 md:col-span-2 sm:flex-row sm:justify-end">
             <button type="button"
-              class="rounded-2xl border border-slate-200 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+              class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 sm:w-auto sm:px-5 sm:py-3 sm:text-base dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
               @click="emit('close')">
               Cancel
             </button>
+
             <button type="submit"
-              class="rounded-2xl bg-sky-600 px-5 py-3 font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70"
+              class="w-full rounded-xl bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-5 sm:py-3 sm:text-base"
               :disabled="loading">
               {{ loading ? 'Saving...' : isEditMode ? 'Update Event' : 'Create Event' }}
             </button>

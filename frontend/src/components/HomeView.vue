@@ -71,7 +71,7 @@ async function handleCreateEvent(payload) {
           </div>
         </div>
 
-        <CalendarView :events="store.eventsData" :loading="store.loading" />
+        <CalendarView :events="store.eventsData" :loading="store.requests.fetchEvents" />
       </div>
     </div>
   </section>
@@ -79,7 +79,7 @@ async function handleCreateEvent(payload) {
   <FormAdd 
     :is-open="isFormOpen" 
     mode="create" 
-    :loading="store.loading" 
+    :loading="store.requests.createEvent" 
     :errors="formErrors" 
     @close="closeForm" 
     @submit="handleCreateEvent" 

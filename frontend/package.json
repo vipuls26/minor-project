@@ -17,6 +17,7 @@
     "axios": "^1.16.1",
     "pinia": "^3.0.4",
     "primeicons": "^7.0.0",
+    "primevue": "^4.5.5",
     "sweetalert2": "^11.26.24",
     "v-calendar": "^3.1.2",
     "vue": "^3.5.32",

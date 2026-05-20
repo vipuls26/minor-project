@@ -2,15 +2,37 @@ import apiUrl from '@/api/axios'
 import { notify } from '@/lib/notify'
 import { defineStore } from 'pinia'
 
+function createRequestState() {
+  return {
+    fetchEvents: false,
+    fetchActiveEvents: false,
+    createEvent: false,
+    updateEvent: false,
+    deleteEvent: false,
+    fetchInterests: false,
+    createInterest: false,
+  }
+}
+
 export const eventStore = defineStore('eventStore', {
   state: () => ({
     eventsData: [],
     activeEventList: [],
-    loading: false,
     error: null,
+    requests: createRequestState(),
   }),
 
+  getters: {
+    loading(state) {
+      return Object.values(state.requests).some(Boolean)
+    },
+  },
+
   actions: {
+    setRequestState(requestName, value) {
+      this.requests[requestName] = value
+    },
+
     showMessage(type, message) {
       notify(type, message)
     },
@@ -27,15 +49,31 @@ export const eventStore = defineStore('eventStore', {
     },
 
     getErrorMessage(error) {
-      return error.response?.data?.message || error.message || 'Something went wrong'
+      return error.userMessage || error.response?.data?.message || error.message || 'Something went wrong'
     },
 
     getValidationErrors(error) {
       return error.response?.data?.errors || {}
     },
 
+    syncEventRecord(updatedEvent) {
+      this.eventsData = this.eventsData.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
+      this.activeEventList = this.activeEventList.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
+    },
+
+    syncInterestCount(eventId, count) {
+      const updateCount = (event) => {
+        if (event.id === eventId) {
+          event.interests_count = count
+        }
+      }
+
+      this.activeEventList.forEach(updateCount)
+      this.eventsData.forEach(updateCount)
+    },
+
     async fetchEvent() {
-      this.loading = true
+      this.setRequestState('fetchEvents', true)
       this.error = null
 
       try {
@@ -45,12 +83,12 @@ export const eventStore = defineStore('eventStore', {
         this.error = this.getErrorMessage(error)
         this.showMessage('error', this.error)
       } finally {
-        this.loading = false
+        this.setRequestState('fetchEvents', false)
       }
     },
 
     async activeEvent() {
-      this.loading = true
+      this.setRequestState('fetchActiveEvents', true)
       this.error = null
 
       try {
@@ -60,12 +98,12 @@ export const eventStore = defineStore('eventStore', {
         this.error = this.getErrorMessage(error)
         this.showMessage('error', this.error)
       } finally {
-        this.loading = false
+        this.setRequestState('fetchActiveEvents', false)
       }
     },
 
     async createEvent(formData) {
-      this.loading = true
+      this.setRequestState('createEvent', true)
       this.error = null
 
       try {
@@ -84,22 +122,19 @@ export const eventStore = defineStore('eventStore', {
           errors: this.getValidationErrors(error),
         }
       } finally {
-        this.loading = false
+        this.setRequestState('createEvent', false)
       }
     },
 
     async updateEvent(id, formData) {
-      this.loading = true
+      this.setRequestState('updateEvent', true)
       this.error = null
 
       try {
         const response = await apiUrl.post(`edit/${id}`, this.eventPayload(formData))
-
-        this.eventsData = this.eventsData.map((event) => {
-          return event.id === id ? response.data : event
-        })
-
+        this.syncEventRecord(response.data)
         this.showMessage('success', 'Event updated successfully')
+
         return { ok: true, data: response.data }
       } catch (error) {
         this.error = this.getErrorMessage(error)
@@ -111,17 +146,18 @@ export const eventStore = defineStore('eventStore', {
           errors: this.getValidationErrors(error),
         }
       } finally {
-        this.loading = false
+        this.setRequestState('updateEvent', false)
       }
     },
 
     async deleteEvent(id) {
-      this.loading = true
+      this.setRequestState('deleteEvent', true)
       this.error = null
 
       try {
         await apiUrl.delete(`delete/${id}`)
         this.eventsData = this.eventsData.filter((event) => event.id !== id)
+        this.activeEventList = this.activeEventList.filter((event) => event.id !== id)
         this.showMessage('success', 'Event deleted successfully')
 
         return { ok: true }
@@ -134,22 +170,31 @@ export const eventStore = defineStore('eventStore', {
           message: this.error,
         }
       } finally {
-        this.loading = false
+        this.setRequestState('deleteEvent', false)
       }
     },
 
     async fetchInterests(eventId) {
+      this.setRequestState('fetchInterests', true)
+
       try {
         const response = await apiUrl.get(`events/${eventId}/interests`)
+        this.syncInterestCount(eventId, response.data.length)
+
         return { ok: true, data: response.data }
       } catch (error) {
         const message = this.getErrorMessage(error)
         this.showMessage('error', message)
+
         return { ok: false, message }
+      } finally {
+        this.setRequestState('fetchInterests', false)
       }
     },
 
     async createInterest(eventId, formData) {
+      this.setRequestState('createInterest', true)
+
       try {
         const response = await apiUrl.post(`events/${eventId}/interests`, {
           name: formData.name,
@@ -168,6 +213,8 @@ export const eventStore = defineStore('eventStore', {
           message,
           errors: this.getValidationErrors(error),
         }
+      } finally {
+        this.setRequestState('createInterest', false)
       }
     },
   },
