@@ -6,7 +6,7 @@ use App\Models\Event;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
-class eventUpdate extends FormRequest
+class EventUpdate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +21,11 @@ class eventUpdate extends FormRequest
         return [
             'name' => 'required|min:3|max:30|string',
             'category' => 'required|string|in:conference,workshop,meetup,webinar,hackathon,social',
-            'location' => 'required|min:3|max:10|string',
+            'location' => 'required|min:3|max:120|string',
             'start_date' => 'required|date|after:now',
             'end_date' => 'required|date|after:start_date',
             'capacity' => 'required|integer|min:1',
+            'status' => 'required|string|in:active,inactive',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'remove_image' => 'nullable|boolean',
         ];
@@ -43,7 +44,7 @@ class eventUpdate extends FormRequest
 
             'location.required' => 'Event location is required',
             'location.min' => 'Event location must be more than 3 character',
-            'location.max' => 'Event location not be more than 10 character',
+            'location.max' => 'Event location must not be more than 120 characters',
 
             'start_date.required' => 'Event start date is required',
             'start_date.date' => 'Date must be a valid date and time',
@@ -56,6 +57,9 @@ class eventUpdate extends FormRequest
             'capacity.required' => 'Add total user capacity',
             'capacity.integer' => 'Capacity must be an integer',
             'capacity.min' => 'Capacity must be at least 1',
+
+            'status.required' => 'Event status is required',
+            'status.in' => 'Status must be either active or inactive',
 
             'image.image' => 'Event image must be a valid image file',
             'image.mimes' => 'Event image must be a JPG, PNG, or WEBP file',
