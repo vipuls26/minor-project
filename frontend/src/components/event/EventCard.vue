@@ -1,11 +1,11 @@
 <template>
   <BaseCard
-    class="bg-zinc-50/95 transition-all duration-200 hover:border-indigo-600/30 dark:bg-zinc-900/95"
+    class="bg-white transition-all duration-200 hover:border-indigo-600/30 dark:bg-zinc-900"
   >
     <div class="space-y-4">
       <div
         v-if="event.image_url"
-        class="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900"
+        class="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900"
       >
         <img
           :src="event.image_url"
