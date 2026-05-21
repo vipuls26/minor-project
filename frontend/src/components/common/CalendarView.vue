@@ -43,7 +43,7 @@ const hasEvents = computed(() => eventAttributes.value.length > 0)
 
 <template>
   <section
-    class="rounded-3xl border border-zinc-200/80 bg-zinc-50/95 p-5 shadow-xl shadow-zinc-200/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/90 dark:shadow-black/20"
+    class="rounded-3xl border border-zinc-200/80 bg-zinc-50/95 p-4 sm:p-5 shadow-xl shadow-zinc-200/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/90 dark:shadow-black/20"
   >
     <div class="mb-4 flex items-center justify-between gap-4">
       <div>

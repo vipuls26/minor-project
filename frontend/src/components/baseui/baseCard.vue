@@ -22,5 +22,5 @@ const props = defineProps({
   },
 })
 
-const contentClasses = computed(() => (props.padded ? 'p-5' : ''))
+const contentClasses = computed(() => (props.padded ? 'p-4 sm:p-5' : ''))
 </script>

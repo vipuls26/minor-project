@@ -44,14 +44,14 @@ async function handleCreateEvent(payload) {
 
 <template>
   <section class="min-h-screen w-full bg-[url('/background.jpg')] bg-cover bg-center bg-no-repeat transition-colors duration-300">
-    <div class="min-h-screen bg-white/80 py-10 dark:bg-zinc-950/85">
-      <div class="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-10 px-6 md:px-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <div class="space-y-5">
+    <div class="min-h-screen bg-white/80 py-8 sm:py-10 dark:bg-zinc-950/85">
+      <div class="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-8 sm:gap-10 px-6 md:px-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <div class="space-y-4 sm:space-y-5">
           <div class="space-y-4">
-            <h1 class="max-w-2xl text-2xl font-bold leading-tight text-zinc-900 dark:text-zinc-100 md:text-5xl">
+            <h1 class="max-w-2xl text-xl sm:text-2xl font-bold leading-tight text-zinc-900 dark:text-zinc-100 md:text-5xl">
               Plan, organize, and manage every event in one place.
             </h1>
-            <p class="max-w-2xl text-base text-zinc-500 dark:text-zinc-400 md:text-lg">
+            <p class="max-w-2xl text-sm sm:text-base text-zinc-500 dark:text-zinc-400 md:text-lg">
               From seamless ticketing to guest management, access all the tools you need to execute flawless experiences.
             </p>
           </div>

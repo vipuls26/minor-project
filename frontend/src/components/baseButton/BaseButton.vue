@@ -19,9 +19,9 @@ const props = defineProps({
   htmlType: { type: String, default: 'button' },
 })
 
-const buttonClasses = computed(() => {
+  const buttonClasses = computed(() => {
   const baseClasses =
-    'inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60'
+    'inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 sm:py-2.5 text-sm font-medium shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60'
 
   const variants = {
     primary: 'bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500',

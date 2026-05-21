@@ -10,7 +10,7 @@
         <img
           :src="event.image_url"
           :alt="`${event.name} image`"
-          class="h-44 w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+          class="h-40 sm:h-44 w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
         >
       </div>
 
@@ -29,7 +29,7 @@
 
           
           <h2
-            class="line-clamp-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100"
+            class="line-clamp-2 text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100"
           >
             {{ event.name }}
           </h2>
@@ -139,7 +139,7 @@
       <button
         v-if="showInterestButton"
         type="button"
-        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 sm:py-2.5 text-sm font-medium text-white transition-colors hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
         :class="interestButtonClass"
         :disabled="isInterestDisabled"
         @click="openInterest"

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="min-h-[calc(100vh-140px)] bg-white py-8 transition-colors duration-300 dark:bg-zinc-950"
+    class="min-h-[calc(100vh-140px)] bg-white py-6 sm:py-8 transition-colors duration-300 dark:bg-zinc-950"
   >
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
@@ -8,14 +8,14 @@
         <i class="pi pi-spin pi-spinner text-3xl text-zinc-500 dark:text-zinc-400"></i>
       </div>
 
-      <div v-else-if="store.eventsData.length" class="space-y-8">
+      <div v-else-if="store.eventsData.length" class="space-y-6 sm:space-y-8">
 
         <div
           class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <button
             type="button"
-            class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
             @click="openCreateDialog"
           >
             <i class="pi pi-plus"></i>
@@ -58,7 +58,7 @@
           <div class="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
             <button
               type="button"
-              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
               :disabled="currentPage === 1"
               @click="goToPreviousPage"
             >
@@ -68,7 +68,7 @@
 
             <button
               type="button"
-              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
               :disabled="currentPage === totalPages"
               @click="goToNextPage"
             >
