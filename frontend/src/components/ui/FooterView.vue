@@ -1,7 +1,7 @@
 <template>
-  <footer class="border-t border-zinc-200 bg-white py-6 dark:border-zinc-800 dark:bg-zinc-950">
+  <footer class="border-t border-zinc-200/80 bg-white py-5 dark:border-white/10 dark:bg-zinc-950">
     <div
-      class="mx-auto flex max-w-7xl flex-col items-center justify-end gap-4 px-4 sm:px-6 md:flex-row lg:px-8"
+      class="mx-auto flex max-w-7xl flex-col items-center justify-end gap-3 px-4 pb-1 sm:px-6 md:flex-row lg:px-8"
     >
       <div class="flex gap-4 text-zinc-500 dark:text-zinc-400">
         <a href="http://www.instagram.com" aria-label="Instagram">

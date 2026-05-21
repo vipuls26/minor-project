@@ -1,6 +1,6 @@
 <template>
   <article
-    class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+    class="overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md dark:border-white/10 dark:bg-zinc-900 dark:hover:border-white/20"
   >
     <div v-if="$slots.image" class="aspect-16/10 overflow-hidden bg-white dark:bg-zinc-900">
       <slot name="image" />
@@ -22,5 +22,5 @@ const props = defineProps({
   },
 })
 
-const contentClasses = computed(() => (props.padded ? 'p-6' : ''))
+const contentClasses = computed(() => (props.padded ? 'p-5' : ''))
 </script>

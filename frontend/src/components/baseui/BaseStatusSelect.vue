@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col gap-1.5">
-    <label :for="id" class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+    <label :for="id" class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
       {{ label }}<span v-if="required" class="ml-1 text-red-600" aria-hidden="true">*</span>
     </label>
 
     <div
-      class="relative overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 shadow-sm transition focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-100 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none dark:focus-within:border-indigo-500 dark:focus-within:ring-indigo-950"
+      class="relative overflow-hidden rounded-xl border border-zinc-200/90 bg-zinc-50 shadow-sm transition-colors focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-100 dark:border-white/10 dark:bg-zinc-900 dark:shadow-none dark:focus-within:border-indigo-500 dark:focus-within:ring-indigo-950"
     >
       <select
         :id="id"
@@ -19,7 +19,7 @@
       </select>
 
       <div
-        class="pointer-events-none absolute inset-y-0 right-0 flex w-11 items-center justify-center border-l border-zinc-200 bg-zinc-50 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400"
+        class="pointer-events-none absolute inset-y-0 right-0 flex w-11 items-center justify-center border-l border-zinc-200/90 bg-zinc-50 text-zinc-500 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-400"
       >
         <i class="pi pi-chevron-down text-sm"></i>
       </div>

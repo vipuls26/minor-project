@@ -1,16 +1,16 @@
 <template>
   <BaseCard
-    class="bg-white transition-all duration-200 hover:border-indigo-600/30 dark:bg-zinc-900"
+    class="bg-white transition-all duration-200 hover:border-indigo-400/40 dark:bg-zinc-900"
   >
-    <div class="space-y-4">
+    <div class="space-y-3.5">
       <div
         v-if="event.image_url"
-        class="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900"
+        class="overflow-hidden rounded-xl border border-zinc-200/80 bg-white dark:border-white/10 dark:bg-zinc-900"
       >
         <img
           :src="event.image_url"
           :alt="`${event.name} image`"
-          class="h-48 w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+          class="h-44 w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
         >
       </div>
 
@@ -20,7 +20,7 @@
             <span
               v-for="badge in badges"
               :key="badge.label"
-              class="rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+              class="rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider"
               :class="badge.class"
             >
               {{ badge.label }}
@@ -29,7 +29,7 @@
 
           
           <h2
-            class="line-clamp-2 text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+            class="line-clamp-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100"
           >
             {{ event.name }}
           </h2>
@@ -41,7 +41,7 @@
           <button
             type="button"
             aria-label="Manage attendees"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
             :disabled="actionLoading"
             title="Manage attendees"
             @click="$emit('attendees', event)"
@@ -52,7 +52,7 @@
           <button
             type="button"
             aria-label="Edit event"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
             :disabled="actionLoading"
             @click="$emit('edit', event)"
           >
@@ -62,7 +62,7 @@
           <button
             type="button"
             aria-label="Delete event"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-rose-600 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-rose-400"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-rose-600 focus-visible:outline-2 focus-visible:outline-rose-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-rose-400"
             :disabled="actionLoading"
             @click="deleteThisEvent"
           >
@@ -92,35 +92,35 @@
 
       
       <div
-        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-zinc-200 pt-3 text-sm dark:border-zinc-800 sm:flex sm:flex-wrap"
+        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-zinc-200/80 pt-3 text-sm dark:border-white/10 sm:flex sm:flex-wrap"
       >
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-map-marker text-xs text-zinc-500 dark:text-zinc-400"></i>
-          <span class="text-zinc-500 dark:text-zinc-400">
+          <i class="pi pi-map-marker text-xs text-zinc-400 dark:text-zinc-500"></i>
+          <span class="text-zinc-400 dark:text-zinc-500">
             {{ event.location }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-calendar text-xs text-zinc-500 dark:text-zinc-400"></i>
-          <span class="text-zinc-500 dark:text-zinc-400">
+          <i class="pi pi-calendar text-xs text-zinc-400 dark:text-zinc-500"></i>
+          <span class="text-zinc-400 dark:text-zinc-500">
             {{ formattedStartDate }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-users text-xs text-zinc-500 dark:text-zinc-400"></i>
-          <span class="text-zinc-500 dark:text-zinc-400">
+          <i class="pi pi-users text-xs text-zinc-400 dark:text-zinc-500"></i>
+          <span class="text-zinc-400 dark:text-zinc-500">
             {{ registrationSummary }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-ticket text-xs text-zinc-500 dark:text-zinc-400"></i>
+          <i class="pi pi-ticket text-xs text-zinc-400 dark:text-zinc-500"></i>
 
           <span
             :class="seatsLeftClass"
-            class="text-zinc-500 dark:text-zinc-400"
+            class="text-zinc-400 dark:text-zinc-500"
           >
             {{ seatsLeftLabel }}
           </span>
@@ -128,7 +128,7 @@
 
         <span
           v-if="showUpdated"
-          class="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400"
+          class="inline-flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500"
         >
           <i class="pi pi-refresh text-[10px]"></i>
           <span>Updated {{ formattedUpdatedDate }}</span>
@@ -139,7 +139,7 @@
       <button
         v-if="showInterestButton"
         type="button"
-        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
         :class="interestButtonClass"
         :disabled="isInterestDisabled"
         @click="openInterest"
@@ -184,12 +184,12 @@ const props = defineProps({
 })
 
 const categoryPalette = {
-  conference: 'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-500/15 dark:text-fuchsia-300',
-  workshop: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300',
-  meetup: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300',
-  webinar: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/15 dark:text-indigo-300',
-  hackathon: 'bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300',
-  social: 'bg-rose-100 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300',
+  conference: 'border border-fuchsia-300/60 bg-fuchsia-50 text-fuchsia-700 dark:border-fuchsia-400/40 dark:bg-fuchsia-500/10 dark:text-fuchsia-300',
+  workshop: 'border border-emerald-300/60 bg-emerald-50 text-emerald-700 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:text-emerald-300',
+  meetup: 'border border-indigo-300/60 bg-indigo-50 text-indigo-700 dark:border-indigo-400/40 dark:bg-indigo-500/10 dark:text-indigo-300',
+  webinar: 'border border-indigo-300/60 bg-indigo-50 text-indigo-700 dark:border-indigo-400/40 dark:bg-indigo-500/10 dark:text-indigo-300',
+  hackathon: 'border border-orange-300/60 bg-orange-50 text-orange-700 dark:border-orange-400/40 dark:bg-orange-500/10 dark:text-orange-300',
+  social: 'border border-rose-300/60 bg-rose-50 text-rose-700 dark:border-rose-400/40 dark:bg-rose-500/10 dark:text-rose-300',
 }
 
 const store = eventStore()
@@ -332,18 +332,18 @@ const statusLabel = computed(() => {
 
 const statusBadgeClass = computed(() => {
   if (isEventFull.value) {
-    return 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300'
+    return 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300'
   }
 
   if (eventStatus.value === 'started') {
-    return 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300'
+    return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300'
   }
 
   if (eventStatus.value === 'ended') {
-    return 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'
+    return 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300'
   }
 
-  return 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300'
+  return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300'
 })
 
 const categoryLabel = computed(() => {

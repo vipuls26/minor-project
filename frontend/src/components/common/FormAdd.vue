@@ -4,7 +4,7 @@
       class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-zinc-950/45 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
       @click.self="emit('close')">
       <div
-        class="w-full max-w-xl overflow-y-auto rounded-3xl bg-zinc-50 p-4 shadow-2xl max-sm:max-h-[calc(100vh-2rem)] dark:bg-zinc-900 sm:p-6 sm:max-h-[calc(100vh-3rem)]">
+        class="w-full max-w-2xl overflow-y-auto rounded-2xl bg-zinc-50 p-4 shadow-2xl max-sm:max-h-[calc(100vh-2rem)] dark:bg-zinc-900 sm:p-5 sm:max-h-[calc(100vh-3rem)]">
         <div class="flex items-start justify-between gap-4">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-500">
@@ -22,7 +22,7 @@
           </button>
         </div>
 
-        <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
+        <form class="mt-5 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
           <div v-if="generalError"
             class="md:col-span-2 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
             role="alert" aria-live="polite">
@@ -63,8 +63,8 @@
               step="1" :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
           </div>
 
-          <div class="space-y-3 md:col-span-2">
-            <label for="image" class="block text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+          <div class="space-y-2 md:col-span-2">
+            <label for="image" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Event Image
             </label>
 
@@ -74,10 +74,10 @@
             </div>
 
             <input id="image" ref="imageInput" type="file" accept="image/png,image/jpeg,image/webp"
-              class="block w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 file:mr-4 file:rounded-xl file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:file:bg-indigo-500/15 dark:file:text-indigo-200"
+              class="block w-full rounded-xl border border-zinc-200/90 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 file:mr-4 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-3 file:py-1.5 file:font-medium file:text-indigo-600 hover:file:bg-indigo-100 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100 dark:file:bg-indigo-500/15 dark:file:text-indigo-200"
               @change="handleImageChange">
 
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            <p class="text-xs text-zinc-400 dark:text-zinc-500">
               Optional. Upload a JPG, PNG, or WEBP image up to 2 MB.
             </p>
 
@@ -97,15 +97,15 @@
             <BaseStatusSelect id="status" v-model="form.status" />
           </div>
 
-          <div class="flex flex-col gap-3 pt-2 md:col-span-2 sm:flex-row sm:justify-end">
+          <div class="flex flex-col gap-2 pt-1 md:col-span-2 sm:flex-row sm:justify-end">
             <button type="button"
-              class="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium transition-colors"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-800 sm:w-auto"
               @click="emit('close')">
               <i class="pi pi-times text-xs" aria-hidden="true"></i>
               Cancel
             </button>
             <button type="submit"
-              class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-70"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-400 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
               :disabled="loading">
               <i :class="loading ? 'pi pi-spin pi-spinner text-xs' : isEditMode ? 'pi pi-pencil text-xs' : 'pi pi-plus text-xs'"
                 aria-hidden="true"></i>
