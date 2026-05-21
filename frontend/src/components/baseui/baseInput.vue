@@ -18,18 +18,18 @@ defineEmits(['update:modelValue']);
 
 <template>
   <div class="w-full">
-    <label v-if="label" :for="id" class="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    <label v-if="label" :for="id" class="mb-1 block text-sm font-medium text-zinc-900 dark:text-zinc-100">
       {{ label }}
     </label>
     <div class="relative w-full">
-      <div v-if="icon" class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 dark:text-slate-500">
+      <div v-if="icon" class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-zinc-500 dark:text-zinc-400">
         <i :class="`pi ${icon}`"></i>
       </div>
 
       <input :id="id" :type="type" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
         :placeholder="placeholder"
-        class="w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500" :class="[
-          error ? 'border-red-600 dark:border-red-500' : 'border-slate-200 dark:border-slate-700',
+        class="w-full rounded-2xl border bg-zinc-50 px-4 py-3 text-zinc-900 outline-none transition focus:border-indigo-600 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:focus:border-indigo-500" :class="[
+          error ? 'border-red-600 dark:border-red-500' : 'border-zinc-200 dark:border-zinc-800',
           icon ? 'pl-11' : 'px-4' 
         ]" :min="min" />
     </div>

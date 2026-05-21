@@ -11,7 +11,7 @@ const iconClass = computed(() => (themeStore.darkMode ? 'pi pi-sun' : 'pi pi-moo
     <button
         type="button"
         :aria-label="themeStore.themeLabel"
-        class="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-white text-gray-700 shadow-sm transition-all duration-500 ease-in-out hover:scale-110 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-300"
+        class="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-zinc-200 bg-zinc-50 text-zinc-900 shadow-sm transition-all duration-500 ease-in-out hover:scale-110 hover:shadow-md hover:text-indigo-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:text-indigo-500"
         @click="themeStore.toggleTheme"
     >
         <Transition
@@ -27,5 +27,3 @@ const iconClass = computed(() => (themeStore.darkMode ? 'pi pi-sun' : 'pi pi-moo
         </Transition>
     </button>
 </template>
-
-

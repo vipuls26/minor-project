@@ -44,22 +44,22 @@ async function handleCreateEvent(payload) {
 
 <template>
   <section class="min-h-screen w-full bg-[url('/background.jpg')] bg-cover bg-center bg-no-repeat transition-colors duration-300">
-    <div class="min-h-screen bg-blue-50/75 py-12 dark:bg-slate-950/80">
+    <div class="min-h-screen bg-white/80 py-12 dark:bg-zinc-950/85">
       <div class="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-12 px-6 md:px-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div class="space-y-6">
           <div class="space-y-4">
-            <h1 class="text-2xl font-bold leading-tight text-slate-900 dark:text-slate-100 md:text-5xl">
+            <h1 class="text-2xl font-bold leading-tight text-zinc-900 dark:text-zinc-100 md:text-5xl">
               Plan, organize, and manage every event in one place.
             </h1>
-            <p class="text-base text-slate-600 dark:text-slate-300 md:text-lg">
+            <p class="text-base text-zinc-500 dark:text-zinc-400 md:text-lg">
               From seamless ticketing to guest management, access all the tools you need to execute flawless experiences.
             </p>
           </div>
 
-          <ul class="flex flex-wrap gap-4 text-sm font-medium text-slate-700 dark:text-slate-300">
-            <li class="flex items-center gap-2"><span class="text-blue-500 dark:text-sky-400"> <i class="pi pi-map-marker"></i> </span> Best Location</li>
-            <li class="flex items-center gap-2"><span class="text-blue-500 dark:text-sky-400"> <i class="pi pi-money-bill"></i></span> Fit in Budget </li>
-            <li class="flex items-center gap-2"><span class="text-blue-500 dark:text-sky-400"> <i class="pi pi-users"></i> </span> Proper seamless experince </li>
+          <ul class="flex flex-wrap gap-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+            <li class="flex items-center gap-2"><span class="text-indigo-600 dark:text-indigo-500"> <i class="pi pi-map-marker"></i> </span> Best Location</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600 dark:text-indigo-500"> <i class="pi pi-money-bill"></i></span> Fit in Budget </li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600 dark:text-indigo-500"> <i class="pi pi-users"></i> </span> Proper seamless experince </li>
           </ul>
 
           <div class="flex flex-col gap-3 sm:flex-row">

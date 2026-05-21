@@ -1,11 +1,11 @@
 <template>
   <BaseCard
-    class="bg-white/80 transition-all duration-200 hover:border-sky-500/30 dark:bg-slate-900/80"
+    class="bg-zinc-50/95 transition-all duration-200 hover:border-indigo-600/30 dark:bg-zinc-900/95"
   >
     <div class="space-y-4">
       <div
         v-if="event.image_url"
-        class="overflow-hidden rounded-2xl border border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-800"
+        class="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900"
       >
         <img
           :src="event.image_url"
@@ -29,7 +29,7 @@
 
           
           <h2
-            class="line-clamp-2 text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100"
+            class="line-clamp-2 text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
           >
             {{ event.name }}
           </h2>
@@ -41,7 +41,7 @@
           <button
             type="button"
             aria-label="Manage attendees"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-sky-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-sky-400"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
             :disabled="actionLoading"
             title="Manage attendees"
             @click="$emit('attendees', event)"
@@ -52,7 +52,7 @@
           <button
             type="button"
             aria-label="Edit event"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-sky-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-sky-400"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
             :disabled="actionLoading"
             @click="$emit('edit', event)"
           >
@@ -62,7 +62,7 @@
           <button
             type="button"
             aria-label="Delete event"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-rose-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-rose-400"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-rose-600 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-rose-400"
             :disabled="actionLoading"
             @click="deleteThisEvent"
           >
@@ -84,7 +84,7 @@
 
         <span
           v-if="countdownHelperText"
-          class="text-xs text-slate-400"
+          class="text-xs text-zinc-500 dark:text-zinc-400"
         >
           {{ countdownHelperText }}
         </span>
@@ -92,35 +92,35 @@
 
       
       <div
-        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-slate-100 pt-3 text-sm dark:border-slate-800 sm:flex sm:flex-wrap"
+        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-zinc-200 pt-3 text-sm dark:border-zinc-800 sm:flex sm:flex-wrap"
       >
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-map-marker text-xs text-slate-400"></i>
-          <span class="text-slate-600 dark:text-slate-300">
+          <i class="pi pi-map-marker text-xs text-zinc-500 dark:text-zinc-400"></i>
+          <span class="text-zinc-500 dark:text-zinc-400">
             {{ event.location }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-calendar text-xs text-slate-400"></i>
-          <span class="text-slate-600 dark:text-slate-300">
+          <i class="pi pi-calendar text-xs text-zinc-500 dark:text-zinc-400"></i>
+          <span class="text-zinc-500 dark:text-zinc-400">
             {{ formattedStartDate }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-users text-xs text-slate-400"></i>
-          <span class="text-slate-600 dark:text-slate-300">
+          <i class="pi pi-users text-xs text-zinc-500 dark:text-zinc-400"></i>
+          <span class="text-zinc-500 dark:text-zinc-400">
             {{ registrationSummary }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-ticket text-xs text-slate-400"></i>
+          <i class="pi pi-ticket text-xs text-zinc-500 dark:text-zinc-400"></i>
 
           <span
             :class="seatsLeftClass"
-            class="text-slate-600 dark:text-slate-300"
+            class="text-zinc-500 dark:text-zinc-400"
           >
             {{ seatsLeftLabel }}
           </span>
@@ -128,7 +128,7 @@
 
         <span
           v-if="showUpdated"
-          class="inline-flex items-center gap-1.5 text-xs text-slate-400"
+          class="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400"
         >
           <i class="pi pi-refresh text-[10px]"></i>
           <span>Updated {{ formattedUpdatedDate }}</span>
@@ -186,7 +186,7 @@ const props = defineProps({
 const categoryPalette = {
   conference: 'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-500/15 dark:text-fuchsia-300',
   workshop: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300',
-  meetup: 'bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300',
+  meetup: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300',
   webinar: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/15 dark:text-indigo-300',
   hackathon: 'bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300',
   social: 'bg-rose-100 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300',
@@ -275,7 +275,7 @@ const seatsLeftClass = computed(() => {
     return 'text-amber-600 dark:text-amber-400'
   }
 
-  return 'text-slate-600 dark:text-slate-300'
+  return 'text-zinc-500 dark:text-zinc-400'
 })
 
 const isEventFull = computed(() => {
@@ -292,10 +292,10 @@ const interestButtonClass = computed(() => {
   }
 
   if (eventStatus.value === 'started' || eventStatus.value === 'ended') {
-    return 'bg-slate-500 hover:bg-slate-500 dark:bg-slate-600 dark:hover:bg-slate-600'
+    return 'bg-zinc-500 hover:bg-zinc-500 dark:bg-zinc-700 dark:hover:bg-zinc-700'
   }
 
-  return 'bg-sky-600 hover:bg-sky-700'
+  return 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600'
 })
 
 const interestButtonLabel = computed(() => {
@@ -336,14 +336,14 @@ const statusBadgeClass = computed(() => {
   }
 
   if (eventStatus.value === 'started') {
-    return 'bg-violet-100 text-violet-800 dark:bg-violet-500/15 dark:text-violet-300'
+    return 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300'
   }
 
   if (eventStatus.value === 'ended') {
-    return 'bg-slate-200 text-slate-700 dark:bg-slate-700/70 dark:text-slate-200'
+    return 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'
   }
 
-  return 'bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300'
+  return 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300'
 })
 
 const categoryLabel = computed(() => {

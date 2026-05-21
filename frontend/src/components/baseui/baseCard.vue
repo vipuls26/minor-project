@@ -1,8 +1,8 @@
 <template>
   <article
-    class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
+    class="overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
   >
-    <div v-if="$slots.image" class="aspect-16/10 overflow-hidden bg-slate-100 dark:bg-slate-800">
+    <div v-if="$slots.image" class="aspect-16/10 overflow-hidden bg-zinc-50 dark:bg-zinc-900">
       <slot name="image" />
     </div>
 

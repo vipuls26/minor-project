@@ -1,6 +1,6 @@
 <template>
   <header
-    class="sticky top-0 z-50 border-b border-slate-200/60 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90"
+    class="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/90"
   >
     <nav
       class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
@@ -16,8 +16,8 @@
     :class="[
       'border-b-2 px-2 py-1 text-sm font-medium transition-colors duration-200',
       route.name === 'home'
-        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-        : 'border-transparent text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400'
+        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-500'
+        : 'border-transparent text-zinc-500 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-500'
     ]"
   >
     Home
@@ -28,8 +28,8 @@
     :class="[
       'border-b-2 px-2 py-1 text-sm font-medium transition-colors duration-200',
       route.name === 'events'
-        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-        : 'border-transparent text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400'
+        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-500'
+        : 'border-transparent text-zinc-500 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-500'
     ]"
   >
     All Events
@@ -40,8 +40,8 @@
     :class="[
       'border-b-2 px-2 py-1 text-sm font-medium transition-colors duration-200',
       route.name === 'activeEvents'
-        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-        : 'border-transparent text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400'
+        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-500'
+        : 'border-transparent text-zinc-500 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-500'
     ]"
   >
     Upcoming Events
@@ -56,7 +56,7 @@
         
         <button
           @click="toggleMenu"
-          class="inline-flex items-center justify-center rounded-lg p-2 text-slate-700 transition-colors duration-200 hover:bg-slate-100 hover:text-indigo-600 focus:outline-none dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-indigo-400 md:hidden"
+          class="inline-flex items-center justify-center rounded-lg p-2 text-zinc-900 transition-colors duration-200 hover:bg-zinc-50 hover:text-indigo-600 focus:outline-none dark:text-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-indigo-500 md:hidden"
           aria-label="Toggle menu"
         >
           <i
@@ -71,14 +71,14 @@
     <transition name="fade">
       <div
         v-show="isMenuOpen"
-        class="border-t border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:hidden"
+        class="border-t border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 md:hidden"
       >
         <div class="flex flex-col space-y-1">
           <RouterLink
             :to="{ name: 'home' }"
             @click="closeMenu"
-            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 hover:text-indigo-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-indigo-400"
-            active-class="bg-slate-100 text-indigo-600 dark:bg-slate-800 dark:text-indigo-400"
+            class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:bg-zinc-50 hover:text-indigo-600 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
+            active-class="bg-zinc-50 text-indigo-600 dark:bg-zinc-900 dark:text-indigo-500"
           >
             Home
           </RouterLink>
@@ -86,8 +86,8 @@
           <RouterLink
             :to="{ name: 'events' }"
             @click="closeMenu"
-            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 hover:text-indigo-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-indigo-400"
-            active-class="bg-slate-100 text-indigo-600 dark:bg-slate-800 dark:text-indigo-400"
+            class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:bg-zinc-50 hover:text-indigo-600 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
+            active-class="bg-zinc-50 text-indigo-600 dark:bg-zinc-900 dark:text-indigo-500"
           >
             Events
           </RouterLink>
@@ -95,8 +95,8 @@
           <RouterLink
             :to="{ name: 'activeEvents' }"
             @click="closeMenu"
-            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 hover:text-indigo-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-indigo-400"
-            active-class="bg-slate-100 text-indigo-600 dark:bg-slate-800 dark:text-indigo-400"
+            class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:bg-zinc-50 hover:text-indigo-600 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
+            active-class="bg-zinc-50 text-indigo-600 dark:bg-zinc-900 dark:text-indigo-500"
           >
             Upcoming Events
           </RouterLink>

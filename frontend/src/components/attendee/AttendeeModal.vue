@@ -1,26 +1,26 @@
 <template>
   <Teleport to="body">
-    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 py-8"
+    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 px-4 py-8"
       @click.self="emit('close')">
       <div
-        class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl dark:bg-slate-900 sm:p-8">
+        class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-zinc-50 p-6 shadow-2xl dark:bg-zinc-900 sm:p-8">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-500">
               {{ canRegister ? 'Register Interest' : 'Interested Users' }}
             </p>
-            <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ event?.name }}</h2>
+            <h2 class="mt-2 text-2xl font-bold text-zinc-900 dark:text-zinc-100">{{ event?.name }}</h2>
           </div>
 
           <button type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-zinc-200 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-800 dark:hover:text-zinc-100"
             @click="emit('close')">
             <i class="pi pi-times"></i>
           </button>
         </div>
 
         <!-- form -->
-        <form v-if="canRegister" class="mt-6 grid gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-800 sm:grid-cols-3"
+        <form v-if="canRegister" class="mt-6 grid gap-4 rounded-2xl bg-zinc-50 p-4 dark:bg-zinc-900 sm:grid-cols-3"
           @submit.prevent="submitForm">
           <div
             v-if="generalError"
@@ -54,7 +54,7 @@
 
           <div class="sm:col-span-3">
             <button type="submit"
-              class="rounded-2xl bg-sky-600 px-5 py-3 font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70"
+              class="rounded-2xl bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="loading || isEventFull">
               {{ loading ? 'Saving...' : isEventFull ? 'Capacity Reached' : 'Register Attendee' }}
             </button>
@@ -72,32 +72,32 @@
             {{ generalError }}
           </div>
 
-          <div v-if="loadingList" class="py-6 text-center text-slate-500 dark:text-slate-400">
+          <div v-if="loadingList" class="py-6 text-center text-zinc-500 dark:text-zinc-400">
             <i class="pi pi-spin pi-spinner mr-2"></i>
           </div>
 
           <div v-else-if="attendees.length"
-            class="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700">
-            <table class="w-full text-left text-sm text-slate-700 dark:text-slate-200">
-              <thead class="bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+            class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800">
+            <table class="w-full text-left text-sm text-zinc-900 dark:text-zinc-100">
+              <thead class="bg-zinc-50 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                 <tr>
                   <th class="px-4 py-3 font-semibold">Name</th>
                   <th class="px-4 py-3 font-semibold">Email</th>
                   <th class="px-4 py-3 font-semibold">Mobile No</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+              <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                 <tr v-for="attendee in attendees" :key="attendee.id">
                   <td class="px-4 py-3">
                     <div class="flex items-center gap-3">
                       <span
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-xs font-bold uppercase tracking-[0.18em] text-sky-700 dark:bg-sky-500/15 dark:text-sky-300"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold uppercase tracking-[0.18em] text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300"
                       >
                         {{ attendeeInitials(attendee.name) }}
                       </span>
                       <div>
-                        <p class="font-semibold text-slate-900 dark:text-slate-100">{{ attendee.name }}</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Registered attendee</p>
+                        <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ attendee.name }}</p>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Registered attendee</p>
                       </div>
                     </div>
                   </td>
@@ -109,7 +109,7 @@
           </div>
 
           <p v-else
-            class="rounded-2xl border border-dashed border-slate-300 px-4 py-8 text-center text-slate-500 dark:border-slate-700 dark:text-slate-400">
+            class="rounded-2xl border border-dashed border-zinc-200 px-4 py-8 text-center text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
             No attendees registered yet.
           </p>
         </div>

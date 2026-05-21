@@ -1,22 +1,22 @@
 <template>
   <Teleport to="body">
     <div v-if="isOpen"
-      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/45 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
+      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-zinc-950/45 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
       @click.self="emit('close')">
       <div
-        class="w-full max-w-xl overflow-y-auto rounded-3xl bg-white p-4 shadow-2xl max-sm:max-h-[calc(100vh-2rem)] dark:bg-slate-900 sm:p-6 sm:max-h-[calc(100vh-3rem)]">
+        class="w-full max-w-xl overflow-y-auto rounded-3xl bg-zinc-50 p-4 shadow-2xl max-sm:max-h-[calc(100vh-2rem)] dark:bg-zinc-900 sm:p-6 sm:max-h-[calc(100vh-3rem)]">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-500">
               {{ isEditMode ? 'Update Event' : 'New Event' }}
             </p>
-            <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
+            <h2 class="mt-2 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
               {{ isEditMode ? 'Edit event details' : 'Add event details' }}
             </h2>
           </div>
 
           <button type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-zinc-200 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-800 dark:hover:text-zinc-100"
             @click="emit('close')">
             <i class="pi pi-times"></i>
           </button>
@@ -63,27 +63,27 @@
           </div>
 
           <div class="space-y-3 md:col-span-2">
-            <label for="image" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+            <label for="image" class="block text-sm font-semibold text-zinc-900 dark:text-zinc-100">
               Event Image
             </label>
 
             <div v-if="imagePreview"
-              class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/60">
+              class="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
               <img :src="imagePreview" alt="Event preview" class="h-48 w-full object-cover">
             </div>
 
             <input id="image" ref="imageInput" type="file" accept="image/png,image/jpeg,image/webp"
-              class="block w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-xl file:border-0 file:bg-sky-50 file:px-4 file:py-2 file:font-semibold file:text-sky-700 hover:file:bg-sky-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:file:bg-sky-500/15 dark:file:text-sky-200"
+              class="block w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 file:mr-4 file:rounded-xl file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:file:bg-indigo-500/15 dark:file:text-indigo-200"
               @change="handleImageChange">
 
-            <p class="text-xs text-slate-500 dark:text-slate-400">
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">
               Optional. Upload a JPG, PNG, or WEBP image up to 2 MB.
             </p>
 
             <label v-if="isEditMode && props.initialEvent?.image_url"
-              class="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+              class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
               <input v-model="form.remove_image" type="checkbox"
-                class="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 dark:border-slate-600 dark:bg-slate-800">
+                class="h-4 w-4 rounded border-zinc-200 text-indigo-600 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-900">
               Remove current image
             </label>
 
@@ -98,12 +98,12 @@
 
           <div class="flex flex-col gap-3 pt-2 md:col-span-2 sm:flex-row sm:justify-end">
             <button type="button"
-              class="rounded-2xl border border-slate-200 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+              class="rounded-2xl border border-zinc-200 px-5 py-3 font-semibold text-zinc-900 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-900"
               @click="emit('close')">
               Cancel
             </button>
             <button type="submit"
-              class="rounded-2xl bg-sky-600 px-5 py-3 font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70"
+              class="rounded-2xl bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="loading">
               {{ loading ? 'Saving...' : isEditMode ? 'Update Event' : 'Create Event' }}
             </button>
