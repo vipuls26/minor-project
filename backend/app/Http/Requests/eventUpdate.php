@@ -25,6 +25,8 @@ class eventUpdate extends FormRequest
             'start_date' => 'required|date|after:now',
             'end_date' => 'required|date|after:start_date',
             'capacity' => 'required|integer|min:1',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'remove_image' => 'nullable|boolean',
         ];
     }
 
@@ -54,6 +56,10 @@ class eventUpdate extends FormRequest
             'capacity.required' => 'Add total user capacity',
             'capacity.integer' => 'Capacity must be an integer',
             'capacity.min' => 'Capacity must be at least 1',
+
+            'image.image' => 'Event image must be a valid image file',
+            'image.mimes' => 'Event image must be a JPG, PNG, or WEBP file',
+            'image.max' => 'Event image size must not exceed 2 MB',
         ];
     }
 

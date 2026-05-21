@@ -62,6 +62,36 @@
               :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
           </div>
 
+          <div class="space-y-3 md:col-span-2">
+            <label for="image" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+              Event Image
+            </label>
+
+            <div v-if="imagePreview"
+              class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/60">
+              <img :src="imagePreview" alt="Event preview" class="h-48 w-full object-cover">
+            </div>
+
+            <input id="image" ref="imageInput" type="file" accept="image/png,image/jpeg,image/webp"
+              class="block w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-xl file:border-0 file:bg-sky-50 file:px-4 file:py-2 file:font-semibold file:text-sky-700 hover:file:bg-sky-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:file:bg-sky-500/15 dark:file:text-sky-200"
+              @change="handleImageChange">
+
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Optional. Upload a JPG, PNG, or WEBP image up to 2 MB.
+            </p>
+
+            <label v-if="isEditMode && props.initialEvent?.image_url"
+              class="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+              <input v-model="form.remove_image" type="checkbox"
+                class="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 dark:border-slate-600 dark:bg-slate-800">
+              Remove current image
+            </label>
+
+            <p v-if="fieldError('image')" class="text-sm text-red-600">
+              {{ fieldError('image') }}
+            </p>
+          </div>
+
           <div v-if="isEditMode" class="space-y-2 md:col-span-2">
             <BaseStatusSelect id="status" v-model="form.status" />
           </div>
@@ -85,7 +115,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import * as yup from 'yup'
 
 import BaseInput from '../baseui/baseInput.vue'
@@ -109,10 +139,14 @@ const form = reactive({
   start_date: '',
   end_date: '',
   capacity: '',
+  image: null,
+  remove_image: false,
   status: 'active',
 })
 
 const localErrors = ref({})
+const imageInput = ref(null)
+const imagePreview = ref('')
 const isEditMode = computed(() => props.mode === 'edit')
 const minimumStartDate = computed(() => toDateTimeLocal(new Date()))
 const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
@@ -187,7 +221,15 @@ function fillForm() {
   form.start_date = toDateTimeLocal(props.initialEvent?.start_date || '')
   form.end_date = toDateTimeLocal(props.initialEvent?.end_date || '')
   form.capacity = props.initialEvent?.capacity || '1'
+  form.image = null
+  form.remove_image = false
   form.status = props.initialEvent?.status || 'active'
+  setImagePreview(props.initialEvent?.image_url || '')
+
+  if (imageInput.value) {
+    imageInput.value.value = ''
+  }
+
   localErrors.value = {}
 }
 
@@ -206,8 +248,23 @@ async function submitForm() {
     start_date: form.start_date,
     end_date: form.end_date,
     capacity: Number(form.capacity),
+    image: form.image,
+    remove_image: form.remove_image,
     status: form.status,
   })
+}
+
+function handleImageChange(event) {
+  const [file] = event.target.files || []
+  form.image = file || null
+
+  if (form.image) {
+    form.remove_image = false
+    setImagePreview(URL.createObjectURL(form.image))
+    return
+  }
+
+  setImagePreview(props.initialEvent?.image_url || '')
 }
 
 async function validateForm() {
@@ -249,6 +306,17 @@ function formatMessage(message) {
   return message.charAt(0).toUpperCase() + message.slice(1)
 }
 
+function setImagePreview(value) {
+  revokeImagePreview()
+  imagePreview.value = value || ''
+}
+
+function revokeImagePreview() {
+  if (imagePreview.value?.startsWith('blob:')) {
+    URL.revokeObjectURL(imagePreview.value)
+  }
+}
+
 function isFutureDateTime(value) {
   const targetTimestamp = new Date(value).getTime()
   const currentTimestamp = Date.now()
@@ -271,4 +339,28 @@ function toDateTimeLocal(value) {
   const dateText = typeof value === 'string' ? value : value.toISOString()
   return dateText.replace(' ', 'T').slice(0, 16)
 }
+
+watch(
+  () => form.remove_image,
+  (shouldRemove) => {
+    if (!shouldRemove) {
+      if (!form.image) {
+        setImagePreview(props.initialEvent?.image_url || '')
+      }
+      return
+    }
+
+    form.image = null
+
+    if (imageInput.value) {
+      imageInput.value.value = ''
+    }
+
+    setImagePreview('')
+  },
+)
+
+onBeforeUnmount(() => {
+  revokeImagePreview()
+})
 </script>

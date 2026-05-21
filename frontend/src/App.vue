@@ -1,8 +1,15 @@
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div
+    class="min-h-screen flex flex-col bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100"
+  >
     <AppNotification />
+
     <HeaderView />
-    <RouterView />
+
+    <main class="flex-1">
+      <RouterView />
+    </main>
+
     <FooterView />
   </div>
 </template>

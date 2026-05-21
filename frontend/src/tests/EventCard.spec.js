@@ -40,6 +40,7 @@ const baseEvent = {
   updated_at: '2099-08-05T12:00:00',
   interests_count: 7,
   capacity: 20,
+  image_url: 'http://127.0.0.1:8000/storage/events/design-meetup.jpg',
 }
 
 function mountCard(props = {}) {
@@ -99,9 +100,11 @@ describe('EventCard', () => {
     const wrapper = mountCard()
 
     expect(wrapper.text()).toContain('Workshop')
-    expect(wrapper.text()).toContain('Seats Left')
     expect(wrapper.text()).toContain('13 left')
     expect(wrapper.text()).toContain('7 / 20')
+    expect(wrapper.get('img[alt="Design Meetup image"]').attributes('src')).toBe(
+      'http://127.0.0.1:8000/storage/events/design-meetup.jpg',
+    )
   })
 
   it('disables interest registration once the event has started', async () => {

@@ -62,6 +62,8 @@ describe('FormAdd', () => {
       start_date: expect.any(String),
       end_date: expect.any(String),
       capacity: 1,
+      image: null,
+      remove_image: false,
       status: 'active',
     })
   })
@@ -75,6 +77,7 @@ describe('FormAdd', () => {
         location: 'Delhi',
         start_date: '2099-06-01 10:30:00',
         end_date: '2099-06-01 12:30:00',
+        image_url: 'http://127.0.0.1:8000/storage/events/summit.jpg',
         status: 'inactive',
       },
     })
@@ -85,6 +88,9 @@ describe('FormAdd', () => {
     expect(wrapper.get('#start_date').element.value).toBe('2099-06-01T10:30')
     expect(wrapper.get('#end_date').element.value).toBe('2099-06-01T12:30')
     expect(wrapper.get('#status').element.value).toBe('inactive')
+    expect(wrapper.get('img[alt="Event preview"]').attributes('src')).toBe(
+      'http://127.0.0.1:8000/storage/events/summit.jpg',
+    )
 
     await wrapper.get('#category').setValue('conference')
     await wrapper.get('#status').setValue('active')
@@ -98,8 +104,34 @@ describe('FormAdd', () => {
       start_date: '2099-06-01T10:30',
       end_date: '2099-06-01T12:30',
       capacity: 1,
+      image: null,
+      remove_image: false,
       status: 'active',
     })
+  })
+
+  it('allows removing the current image in edit mode', async () => {
+    const wrapper = await mountForm({
+      mode: 'edit',
+      initialEvent: {
+        name: 'Summit',
+        category: 'webinar',
+        location: 'Delhi',
+        start_date: '2099-06-01 10:30:00',
+        end_date: '2099-06-01 12:30:00',
+        image_url: 'http://127.0.0.1:8000/storage/events/summit.jpg',
+        status: 'active',
+      },
+    })
+
+    await wrapper.get('input[type="checkbox"]').setValue(true)
+    await wrapper.get('form').trigger('submit.prevent')
+
+    expect(wrapper.emitted('submit')[0][0]).toMatchObject({
+      image: null,
+      remove_image: true,
+    })
+    expect(wrapper.find('img[alt="Event preview"]').exists()).toBe(false)
   })
 
   it('prefers local validation errors over backend field errors', async () => {
