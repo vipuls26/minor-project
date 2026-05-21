@@ -21,4 +21,4 @@ Route::get('/active', [EventController::class, 'activeEvent']);
 Route::get('/events/{eventId}/interests', [InterestController::class, 'index']);
 Route::post('/events/{eventId}/interests', [InterestController::class, 'store']);
 
-Route::get('/eventList', [EventController::class, 'eventList']);
+
