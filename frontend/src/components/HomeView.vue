@@ -63,7 +63,7 @@ async function handleCreateEvent(payload) {
           </ul>
 
           <div class="flex flex-col gap-3 sm:flex-row">
-            <BaseButton label="Create Event" variant="primary" html-type="button" @click="openForm" />
+            <BaseButton label="Create Event" icon="pi-plus" variant="primary" html-type="button" @click="openForm"  />
           </div>
 
           <div class="grid gap-4 sm:grid-cols-3">

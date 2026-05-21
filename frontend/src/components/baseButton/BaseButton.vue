@@ -1,6 +1,11 @@
 <template>
   <button :type="htmlType" :class="buttonClasses">
-    <slot> {{ label }} </slot>
+    <slot>
+      <span class="inline-flex items-center gap-2">
+        <i v-if="icon" :class="`pi ${icon}`" aria-hidden="true"></i>
+        <span>{{ label }}</span>
+      </span>
+    </slot>
   </button>
 </template>
 
@@ -9,6 +14,7 @@ import { computed } from 'vue'
 
 const props = defineProps({
   label: { type: String, default: 'Button' },
+  icon: { type: String, default: '' },
   variant: { type: String, default: 'primary' },
   htmlType: { type: String, default: 'button' },
 })
@@ -18,7 +24,7 @@ const buttonClasses = computed(() => {
     'px-5 py-2.5 rounded-4xl font-semibold text-sm shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2'
 
   const variants = {
-    primary: 'bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus-visible:outline-indigo-500',
+    primary: 'bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500',
     secondary: 'bg-yellow-500 text-white hover:bg-yellow-700 focus-visible:outline-yellow-600',
     tertiary: 'bg-red-400 text-white hover:bg-red-600 focus-visible:outline-red-500 p-2',
   }

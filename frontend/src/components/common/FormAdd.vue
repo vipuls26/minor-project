@@ -36,15 +36,16 @@
           </div>
 
           <div class="space-y-2">
-            <BaseStatusSelect id="category" label="Category" required v-model="form.category" :options="categoryOptions" />
+            <BaseStatusSelect id="category" label="Category" required v-model="form.category"
+              :options="categoryOptions" />
             <p v-if="fieldError('category')" class="mt-1 text-sm text-red-600">
               {{ fieldError('category') }}
             </p>
           </div>
 
           <div class="space-y-2">
-            <BaseInput id="location" label="Location" required v-model="form.location" type="text" placeholder="Enter location"
-              :error="fieldError('location')" icon="pi-map-marker" />
+            <BaseInput id="location" label="Location" required v-model="form.location" type="text"
+              placeholder="Enter location" :error="fieldError('location')" icon="pi-map-marker" />
           </div>
 
           <div class="space-y-2">
@@ -58,8 +59,8 @@
           </div>
 
           <div class="space-y-2">
-            <BaseInput id="capacity" label="Total Capacity" required v-model="form.capacity" type="number" min="1" step="1"
-              :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
+            <BaseInput id="capacity" label="Total Capacity" required v-model="form.capacity" type="number" min="1"
+              step="1" :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
           </div>
 
           <div class="space-y-3 md:col-span-2">
@@ -98,13 +99,16 @@
 
           <div class="flex flex-col gap-3 pt-2 md:col-span-2 sm:flex-row sm:justify-end">
             <button type="button"
-              class="rounded-2xl border border-zinc-200 px-5 py-3 font-semibold text-zinc-900 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-900"
+              class="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium transition-colors"
               @click="emit('close')">
+              <i class="pi pi-times text-xs" aria-hidden="true"></i>
               Cancel
             </button>
             <button type="submit"
-              class="rounded-2xl bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-70"
+              class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="loading">
+              <i :class="loading ? 'pi pi-spin pi-spinner text-xs' : isEditMode ? 'pi pi-pencil text-xs' : 'pi pi-plus text-xs'"
+                aria-hidden="true"></i>
               {{ loading ? 'Saving...' : isEditMode ? 'Update Event' : 'Create Event' }}
             </button>
           </div>

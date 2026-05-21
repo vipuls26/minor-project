@@ -54,8 +54,9 @@
 
           <div class="sm:col-span-3">
             <button type="submit"
-              class="rounded-2xl bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-70"
+              class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="loading || isEventFull">
+              <i :class="loading ? 'pi pi-spin pi-spinner text-xs' : isEventFull ? 'pi pi-lock text-xs' : 'pi pi-user-plus text-xs'" aria-hidden="true"></i>
               {{ loading ? 'Saving...' : isEventFull ? 'Capacity Reached' : 'Register Attendee' }}
             </button>
           </div>

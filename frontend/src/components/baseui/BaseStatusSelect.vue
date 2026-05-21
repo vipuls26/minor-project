@@ -11,7 +11,7 @@
         :id="id"
         :value="modelValue"
         @change="$emit('update:modelValue', $event.target.value)"
-        class="min-w-0 w-full appearance-none border-0 bg-transparent px-4 py-2.5 pr-12 text-sm font-medium text-zinc-900 outline-none [color-scheme:light] dark:bg-zinc-900 dark:text-zinc-100 dark:[color-scheme:dark]"
+        class="min-w-0 w-full appearance-none border-0 bg-transparent px-4 py-2.5 pr-12 text-sm font-medium text-zinc-900 outline-none dark:bg-zinc-900 dark:text-zinc-100"
       >
         <option v-for="option in options" :key="option.value" :value="option.value">
           {{ option.label }}
