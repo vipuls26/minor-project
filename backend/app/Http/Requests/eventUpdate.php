@@ -20,10 +20,13 @@ class eventUpdate extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:30|string',
+            'category' => 'required|string|in:conference,workshop,meetup,webinar,hackathon,social',
             'location' => 'required|min:3|max:10|string',
             'start_date' => 'required|date|after:now',
             'end_date' => 'required|date|after:start_date',
             'capacity' => 'required|integer|min:1',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'remove_image' => 'nullable|boolean',
         ];
     }
 
@@ -31,25 +34,32 @@ class eventUpdate extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'event name is required',
-            'name.min' => 'event name must be more than 3 character',
-            'name.max' => 'event name not be more than 30 character',
+            'name.required' => 'Event name is required',
+            'name.min' => 'Event name must be more than 3 character',
+            'name.max' => 'Event name not be more than 30 character',
 
-            'location.required' => 'event location is required',
-            'location.min' => 'event location must be more than 3 character',
-            'location.max' => 'event location not be more than 10 character',
+            'category.required' => 'Event category is required',
+            'category.in' => 'Select a valid event category',
 
-            'start_date.required' => 'event start date is required',
-            'start_date.date' => 'date must be a valid date and time',
-            'start_date.after' => 'event start date must be in the future',
+            'location.required' => 'Event location is required',
+            'location.min' => 'Event location must be more than 3 character',
+            'location.max' => 'Event location not be more than 10 character',
 
-            'end_date.required' => 'event end date is required',
-            'end_date.date' => 'date must be a valid date and time',
-            'end_date.after' => 'event end date must be after the start date',
+            'start_date.required' => 'Event start date is required',
+            'start_date.date' => 'Date must be a valid date and time',
+            'start_date.after' => 'Event start date must be in the future',
 
-            'capacity.required' => 'add total user capacity',
-            'capacity.integer' => 'capacity must be an integer',
-            'capacity.min' => 'capacity must be at least 1',
+            'end_date.required' => 'Event end date is required',
+            'end_date.date' => 'Date must be a valid date and time',
+            'end_date.after' => 'Event end date must be after the start date',
+
+            'capacity.required' => 'Add total user capacity',
+            'capacity.integer' => 'Capacity must be an integer',
+            'capacity.min' => 'Capacity must be at least 1',
+
+            'image.image' => 'Event image must be a valid image file',
+            'image.mimes' => 'Event image must be a JPG, PNG, or WEBP file',
+            'image.max' => 'Event image size must not exceed 2 MB',
         ];
     }
 
@@ -73,7 +83,7 @@ class eventUpdate extends FormRequest
             if ($newCapacity < $event->interests_count) {
                 $validator->errors()->add(
                     'capacity',
-                    'capacity cannot be less than the total registered users.'
+                    'Capacity cannot be less than the total registered users.'
                 );
             }
         });

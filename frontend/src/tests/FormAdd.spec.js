@@ -38,10 +38,10 @@ describe('FormAdd', () => {
 
     await wrapper.get('form').trigger('submit.prevent')
 
-    expect(wrapper.text()).toContain('event name is required')
-    expect(wrapper.text()).toContain('location is required')
-    expect(wrapper.text()).toContain('start date is required')
-    expect(wrapper.text()).toContain('end date is required')
+    expect(wrapper.text()).toContain('Event name is required')
+    expect(wrapper.text()).toContain('Location is required')
+    expect(wrapper.text()).toContain('Start date is required')
+    expect(wrapper.text()).toContain('End date is required')
     expect(wrapper.emitted('submit')).toBeUndefined()
   })
 
@@ -57,10 +57,13 @@ describe('FormAdd', () => {
     expect(wrapper.emitted('submit')).toHaveLength(1)
     expect(wrapper.emitted('submit')[0][0]).toEqual({
       name: 'Launch Party',
+      category: 'meetup',
       location: 'Main Hall',
       start_date: expect.any(String),
       end_date: expect.any(String),
       capacity: 1,
+      image: null,
+      remove_image: false,
       status: 'active',
     })
   })
@@ -70,31 +73,65 @@ describe('FormAdd', () => {
       mode: 'edit',
       initialEvent: {
         name: 'Summit',
+        category: 'webinar',
         location: 'Delhi',
         start_date: '2099-06-01 10:30:00',
         end_date: '2099-06-01 12:30:00',
+        image_url: 'http://127.0.0.1:8000/storage/events/summit.jpg',
         status: 'inactive',
       },
     })
 
     expect(wrapper.get('#name').element.value).toBe('Summit')
+    expect(wrapper.get('#category').element.value).toBe('webinar')
     expect(wrapper.get('#location').element.value).toBe('Delhi')
     expect(wrapper.get('#start_date').element.value).toBe('2099-06-01T10:30')
     expect(wrapper.get('#end_date').element.value).toBe('2099-06-01T12:30')
     expect(wrapper.get('#status').element.value).toBe('inactive')
+    expect(wrapper.get('img[alt="Event preview"]').attributes('src')).toBe(
+      'http://127.0.0.1:8000/storage/events/summit.jpg',
+    )
 
+    await wrapper.get('#category').setValue('conference')
     await wrapper.get('#status').setValue('active')
     await wrapper.get('form').trigger('submit.prevent')
 
     expect(wrapper.emitted('submit')).toHaveLength(1)
     expect(wrapper.emitted('submit')[0][0]).toMatchObject({
       name: 'Summit',
+      category: 'conference',
       location: 'Delhi',
       start_date: '2099-06-01T10:30',
       end_date: '2099-06-01T12:30',
       capacity: 1,
+      image: null,
+      remove_image: false,
       status: 'active',
     })
+  })
+
+  it('allows removing the current image in edit mode', async () => {
+    const wrapper = await mountForm({
+      mode: 'edit',
+      initialEvent: {
+        name: 'Summit',
+        category: 'webinar',
+        location: 'Delhi',
+        start_date: '2099-06-01 10:30:00',
+        end_date: '2099-06-01 12:30:00',
+        image_url: 'http://127.0.0.1:8000/storage/events/summit.jpg',
+        status: 'active',
+      },
+    })
+
+    await wrapper.get('input[type="checkbox"]').setValue(true)
+    await wrapper.get('form').trigger('submit.prevent')
+
+    expect(wrapper.emitted('submit')[0][0]).toMatchObject({
+      image: null,
+      remove_image: true,
+    })
+    expect(wrapper.find('img[alt="Event preview"]').exists()).toBe(false)
   })
 
   it('prefers local validation errors over backend field errors', async () => {
@@ -104,7 +141,7 @@ describe('FormAdd', () => {
     const wrapper = await mountForm({
       errors: {
         fields: {
-          start_date: ['backend start date error'],
+          start_date: ['Backend start date error'],
         },
       },
     })
@@ -115,9 +152,20 @@ describe('FormAdd', () => {
     await wrapper.get('#end_date').setValue('2026-05-18T11:00')
     await wrapper.get('form').trigger('submit.prevent')
 
-    expect(wrapper.text()).toContain('start date must be in the future')
-    expect(wrapper.text()).not.toContain('backend start date error')
+    expect(wrapper.text()).toContain('Start date must be in the future')
+    expect(wrapper.text()).not.toContain('Backend start date error')
 
     vi.useRealTimers()
+  })
+
+  it('renders backend general errors inline inside the modal', async () => {
+    const wrapper = await mountForm({
+      errors: {
+        general: 'Unable to save event right now.',
+      },
+    })
+
+    expect(wrapper.text()).toContain('Unable to save event right now.')
+    expect(wrapper.get('[role="alert"]').text()).toContain('Unable to save event right now.')
   })
 })

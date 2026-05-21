@@ -12,22 +12,41 @@ export const eventStore = defineStore('eventStore', {
 
   actions: {
     showMessage(type, message) {
-      notify(type, message)
+      notify(type, this.formatMessage(message))
+    },
+
+    formatMessage(message) {
+      if (typeof message !== 'string' || !message.length) {
+        return message
+      }
+
+      return message.charAt(0).toUpperCase() + message.slice(1)
     },
 
     eventPayload(formData) {
-      return {
-        name: formData.name,
-        location: formData.location,
-        start_date: formData.start_date,
-        end_date: formData.end_date,
-        capacity: formData.capacity,
-        status: formData.status || 'active',
+      const payload = new FormData()
+
+      payload.append('name', formData.name)
+      payload.append('category', formData.category)
+      payload.append('location', formData.location)
+      payload.append('start_date', formData.start_date)
+      payload.append('end_date', formData.end_date)
+      payload.append('capacity', String(formData.capacity))
+      payload.append('status', formData.status || 'active')
+
+      if (formData.image instanceof File) {
+        payload.append('image', formData.image)
       }
+
+      if (formData.remove_image) {
+        payload.append('remove_image', '1')
+      }
+
+      return payload
     },
 
     getErrorMessage(error) {
-      return error.response?.data?.message || error.message || 'Something went wrong'
+      return this.formatMessage(error.response?.data?.message || error.message || 'Something went wrong')
     },
 
     getValidationErrors(error) {

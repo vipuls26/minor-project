@@ -10,7 +10,16 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock('@/stores/eventStore', () => ({
   eventStore: () => ({
+    requests: {
+      deleteEvent: false,
+    },
     deleteEvent: mocks.deleteEvent,
+  }),
+}))
+
+vi.mock('@/stores/themeStore', () => ({
+  useThemeStore: () => ({
+    darkMode: false,
   }),
 }))
 
@@ -23,11 +32,15 @@ vi.mock('sweetalert2', () => ({
 const baseEvent = {
   id: 7,
   name: 'Design Meetup',
+  category: 'workshop',
   location: 'Mumbai',
   start_date: '2099-08-20T18:30:00',
   end_date: '2099-08-20T20:30:00',
   created_at: '2099-08-01T10:00:00',
   updated_at: '2099-08-05T12:00:00',
+  interests_count: 7,
+  capacity: 20,
+  image_url: 'http://127.0.0.1:8000/storage/events/design-meetup.jpg',
 }
 
 function mountCard(props = {}) {
@@ -81,6 +94,17 @@ describe('EventCard', () => {
     await wrapper.get('button[title="Manage attendees"] + button + button').trigger('click')
 
     expect(mocks.deleteEvent).not.toHaveBeenCalled()
+  })
+
+  it('renders the category badge and seats left summary', () => {
+    const wrapper = mountCard()
+
+    expect(wrapper.text()).toContain('Workshop')
+    expect(wrapper.text()).toContain('13 left')
+    expect(wrapper.text()).toContain('7 / 20')
+    expect(wrapper.get('img[alt="Design Meetup image"]').attributes('src')).toBe(
+      'http://127.0.0.1:8000/storage/events/design-meetup.jpg',
+    )
   })
 
   it('disables interest registration once the event has started', async () => {

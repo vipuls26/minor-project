@@ -15,6 +15,7 @@ class EventCapacityUpdateTest extends TestCase
     {
         $event = Event::create([
             'name' => 'Tech Expo',
+            'category' => 'conference',
             'location' => 'Hall A',
             'status' => 'active',
             'start_date' => now()->addDay(),
@@ -38,6 +39,7 @@ class EventCapacityUpdateTest extends TestCase
 
         $response = $this->postJson("/api/edit/{$event->id}", [
             'name' => 'Tech Expo',
+            'category' => 'conference',
             'location' => 'Hall A',
             'status' => 'active',
             'start_date' => now()->addDays(3)->toDateTimeString(),
@@ -56,6 +58,7 @@ class EventCapacityUpdateTest extends TestCase
     {
         $event = Event::create([
             'name' => 'Tech Expo',
+            'category' => 'conference',
             'location' => 'Hall A',
             'status' => 'active',
             'start_date' => now()->addDay(),
@@ -72,6 +75,7 @@ class EventCapacityUpdateTest extends TestCase
 
         $response = $this->postJson("/api/edit/{$event->id}", [
             'name' => 'Tech Expo Updated',
+            'category' => 'webinar',
             'location' => 'Hall A',
             'status' => 'inactive',
             'start_date' => now()->addDays(3)->toDateTimeString(),
@@ -87,5 +91,6 @@ class EventCapacityUpdateTest extends TestCase
 
         $this->assertSame(4, $updatedEvent->capacity);
         $this->assertSame('Tech Expo Updated', $updatedEvent->name);
+        $this->assertSame('webinar', $updatedEvent->category);
     }
 }

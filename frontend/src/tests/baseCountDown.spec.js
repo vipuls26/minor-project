@@ -18,7 +18,7 @@ describe('BaseCountDown', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Event ended!')
+    expect(wrapper.text()).toContain('Ended')
   })
 
   it('shows that an event has started between the start and end dates', () => {
@@ -32,6 +32,6 @@ describe('BaseCountDown', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Event started!')
+    expect(wrapper.text()).toContain('Live now')
   })
 })

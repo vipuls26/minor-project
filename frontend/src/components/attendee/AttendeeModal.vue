@@ -22,6 +22,15 @@
         <!-- form -->
         <form v-if="canRegister" class="mt-6 grid gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-800 sm:grid-cols-3"
           @submit.prevent="submitForm">
+          <div
+            v-if="generalError"
+            class="sm:col-span-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {{ generalError }}
+          </div>
+
           <div v-if="isEventFull" class="sm:col-span-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
             Registration is closed because this event has reached its capacity.
           </div>
@@ -47,13 +56,22 @@
             <button type="submit"
               class="rounded-2xl bg-sky-600 px-5 py-3 font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="loading || isEventFull">
-              {{ loading ? 'Saving...' : isEventFull ? 'Event Full' : 'Register Attendee' }}
+              {{ loading ? 'Saving...' : isEventFull ? 'Capacity Reached' : 'Register Attendee' }}
             </button>
           </div>
         </form>
 
         <!-- table of interested people -->
         <div v-if="showTable" class="mt-6">
+          <div
+            v-if="generalError && !canRegister"
+            class="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {{ generalError }}
+          </div>
+
           <div v-if="loadingList" class="py-6 text-center text-slate-500 dark:text-slate-400">
             <i class="pi pi-spin pi-spinner mr-2"></i>
           </div>
@@ -70,7 +88,19 @@
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                 <tr v-for="attendee in attendees" :key="attendee.id">
-                  <td class="px-4 py-3">{{ attendee.name }}</td>
+                  <td class="px-4 py-3">
+                    <div class="flex items-center gap-3">
+                      <span
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-xs font-bold uppercase tracking-[0.18em] text-sky-700 dark:bg-sky-500/15 dark:text-sky-300"
+                      >
+                        {{ attendeeInitials(attendee.name) }}
+                      </span>
+                      <div>
+                        <p class="font-semibold text-slate-900 dark:text-slate-100">{{ attendee.name }}</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Registered attendee</p>
+                      </div>
+                    </div>
+                  </td>
                   <td class="px-4 py-3">{{ attendee.email }}</td>
                   <td class="px-4 py-3">{{ attendee.mobile_no }}</td>
                 </tr>
@@ -128,20 +158,20 @@ const validationSchema = yup.object({
   name: yup
     .string()
     .trim()
-    .required('name is required')
-    .min(3, 'name must be at least 3 characters')
-    .max(30, 'name must not exceed 30 characters'),
+    .required('Name is required')
+    .min(3, 'Name must be at least 3 characters')
+    .max(30, 'Name must not exceed 30 characters'),
   email: yup
     .string()
     .trim()
-    .required('email is required')
-    .email('email must be a valid email address')
-    .max(100, 'email must not exceed 100 characters'),
+    .required('Email is required')
+    .email('Email must be a valid email address')
+    .max(100, 'Email must not exceed 100 characters'),
   mobile_no: yup
     .string()
     .trim()
-    .required('mobile number is required')
-    .matches(/^\d{10}$/, 'mobile number must be exactly 10 digits'),
+    .required('Mobile number is required')
+    .matches(/^\d{10}$/, 'Mobile number must be exactly 10 digits'),
 })
 
 watch(
@@ -199,7 +229,7 @@ async function submitForm() {
     attendeeCount.value = attendees.value.length
     syncEventInterestCount(attendeeCount.value)
     resetForm()
-    store.showMessage('success', 'registeration complete successfully')
+    store.showMessage('success', 'Registration completed successfully')
     emit('close')
 
 
@@ -207,7 +237,7 @@ async function submitForm() {
     generalError.value = getErrorMessage(error)
     fieldErrors.value = error.response?.data?.errors || {}
 
-    if (!fieldErrors.value.email && generalError.value === 'this email is already register in this event.') {
+    if (!fieldErrors.value.email && generalError.value === 'This email is already registered for this event.') {
       fieldErrors.value = {
         ...fieldErrors.value,
         email: generalError.value,
@@ -274,10 +304,32 @@ function syncEventInterestCount(count) {
 
 function fieldError(fieldName) {
   const error = fieldErrors.value[fieldName]
-  return Array.isArray(error) ? error[0] : error
+  return formatMessage(Array.isArray(error) ? error[0] : error)
 }
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Something went wrong'
+  return formatMessage(error.response?.data?.message || error.message || 'Something went wrong')
+}
+
+function formatMessage(message) {
+  if (typeof message !== 'string' || !message.length) {
+    return message
+  }
+
+  return message.charAt(0).toUpperCase() + message.slice(1)
+}
+
+function attendeeInitials(name) {
+  if (!name) {
+    return 'NA'
+  }
+
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0))
+    .join('')
+    .toUpperCase()
 }
 </script>
