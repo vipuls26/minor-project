@@ -51,6 +51,36 @@ async function mountModal(props = {}) {
 }
 
 describe('AttendeeModal', () => {
+  it('keeps duplicate email errors inline without showing an extra toast', async () => {
+    mocks.get.mockResolvedValueOnce({ data: [] })
+    mocks.post.mockRejectedValueOnce({
+      response: {
+        data: {
+          message: 'This email is already registered for this event.',
+        },
+      },
+    })
+
+    const wrapper = await mountModal({
+      canRegister: true,
+      showTable: false,
+    })
+
+    await wrapper.get('#attendee-name').setValue('Vipul')
+    await wrapper.get('#email').setValue('vipul@example.com')
+    await wrapper.get('#attendee-mobile').setValue('8200269794')
+    await wrapper.get('form').trigger('submit.prevent')
+    await Promise.resolve()
+    await nextTick()
+
+    expect(wrapper.text()).toContain('This email is already registered for this event.')
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+    expect(mocks.showMessage).not.toHaveBeenCalledWith(
+      'error',
+      'This email is already registered for this event.',
+    )
+  })
+
   it('shows attendee fetch errors inline when the table cannot load', async () => {
     mocks.get.mockRejectedValueOnce({
       response: {

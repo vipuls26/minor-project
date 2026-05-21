@@ -23,7 +23,7 @@
         <form v-if="canRegister" class="mt-6 grid gap-4 rounded-2xl bg-zinc-50 p-4 dark:bg-zinc-900 sm:grid-cols-3"
           @submit.prevent="submitForm">
           <div
-            v-if="generalError"
+            v-if="showGeneralError"
             class="sm:col-span-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
             role="alert"
             aria-live="polite"
@@ -153,6 +153,13 @@ const eventCapacity = computed(() => Number(props.event?.capacity || 0))
 const isEventFull = computed(() => {
   return eventCapacity.value > 0 && attendeeCount.value >= eventCapacity.value
 })
+const showGeneralError = computed(() => {
+  if (!generalError.value) {
+    return false
+  }
+
+  return fieldError('email') !== generalError.value
+})
 
 const validationSchema = yup.object({
   name: yup
@@ -249,7 +256,9 @@ async function submitForm() {
       syncEventInterestCount(attendeeCount.value)
     }
 
-    store.showMessage('error', generalError.value)
+    if (shouldShowToastError()) {
+      store.showMessage('error', generalError.value)
+    }
   }
 
   loading.value = false
@@ -305,6 +314,10 @@ function syncEventInterestCount(count) {
 function fieldError(fieldName) {
   const error = fieldErrors.value[fieldName]
   return formatMessage(Array.isArray(error) ? error[0] : error)
+}
+
+function shouldShowToastError() {
+  return showGeneralError.value
 }
 
 function getErrorMessage(error) {
