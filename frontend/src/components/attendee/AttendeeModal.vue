@@ -91,14 +91,9 @@
                 <tr v-for="attendee in attendees" :key="attendee.id">
                   <td class="px-4 py-3">
                     <div class="flex items-center gap-3">
-                      <span
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold uppercase tracking-[0.18em] text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300"
-                      >
-                        {{ attendeeInitials(attendee.name) }}
-                      </span>
                       <div>
                         <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ attendee.name }}</p>
-                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Registered attendee</p>
+                        
                       </div>
                     </div>
                   </td>
