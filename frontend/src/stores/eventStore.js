@@ -53,6 +53,10 @@ export const eventStore = defineStore('eventStore', {
       return error.response?.data?.errors || {}
     },
 
+    hasValidationErrors(errors) {
+      return Boolean(errors && Object.keys(errors).length)
+    },
+
     async fetchEvent() {
       this.loading = true
       this.error = null
@@ -95,12 +99,16 @@ export const eventStore = defineStore('eventStore', {
         return { ok: true, data: response.data }
       } catch (error) {
         this.error = this.getErrorMessage(error)
-        this.showMessage('error', this.error)
+        const validationErrors = this.getValidationErrors(error)
+
+        if (!this.hasValidationErrors(validationErrors)) {
+          this.showMessage('error', this.error)
+        }
 
         return {
           ok: false,
           message: this.error,
-          errors: this.getValidationErrors(error),
+          errors: validationErrors,
         }
       } finally {
         this.loading = false
@@ -122,12 +130,16 @@ export const eventStore = defineStore('eventStore', {
         return { ok: true, data: response.data }
       } catch (error) {
         this.error = this.getErrorMessage(error)
-        this.showMessage('error', this.error)
+        const validationErrors = this.getValidationErrors(error)
+
+        if (!this.hasValidationErrors(validationErrors)) {
+          this.showMessage('error', this.error)
+        }
 
         return {
           ok: false,
           message: this.error,
-          errors: this.getValidationErrors(error),
+          errors: validationErrors,
         }
       } finally {
         this.loading = false
