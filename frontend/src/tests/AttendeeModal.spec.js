@@ -51,6 +51,19 @@ async function mountModal(props = {}) {
 }
 
 describe('AttendeeModal', () => {
+  it('shows asterisks on required attendee field labels', async () => {
+    mocks.get.mockResolvedValueOnce({ data: [] })
+
+    const wrapper = await mountModal({
+      canRegister: true,
+      showTable: false,
+    })
+
+    expect(wrapper.find('label[for="attendee-name"]').text()).toContain('*')
+    expect(wrapper.find('label[for="email"]').text()).toContain('*')
+    expect(wrapper.find('label[for="attendee-mobile"]').text()).toContain('*')
+  })
+
   it('shows attendee fetch errors inline when the table cannot load', async () => {
     mocks.get.mockRejectedValueOnce({
       response: {

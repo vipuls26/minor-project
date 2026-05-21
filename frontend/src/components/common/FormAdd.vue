@@ -31,12 +31,12 @@
 
           <div class="space-y-2 md:col-span-2">
             <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name"
-              icon="pi-calendar-plus" :error="fieldError('name')" />
+              icon="pi-calendar-plus" :error="fieldError('name')" required />
 
           </div>
 
           <div class="space-y-2">
-            <BaseStatusSelect id="category" label="Category" v-model="form.category" :options="categoryOptions" />
+            <BaseStatusSelect id="category" label="Category" v-model="form.category" :options="categoryOptions" required />
             <p v-if="fieldError('category')" class="mt-1 text-sm text-red-600">
               {{ fieldError('category') }}
             </p>
@@ -44,22 +44,22 @@
 
           <div class="space-y-2">
             <BaseInput id="location" label="Location" v-model="form.location" type="text" placeholder="Enter location"
-              :error="fieldError('location')" icon="pi-map-marker" />
+              :error="fieldError('location')" icon="pi-map-marker" required />
           </div>
 
           <div class="space-y-2">
             <BaseInput id="start_date" label="Start Date" v-model="form.start_date" type="datetime-local"
-              :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-clock" />
+              :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-clock" required />
           </div>
 
           <div class="space-y-2">
             <BaseInput id="end_date" label="End Date" v-model="form.end_date" type="datetime-local"
-              :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" />
+              :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" required />
           </div>
 
           <div class="space-y-2">
             <BaseInput id="capacity" label="Total Capacity" v-model="form.capacity" type="number" min="1" step="1"
-              :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
+              :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" required />
           </div>
 
           <div class="space-y-3 md:col-span-2">

@@ -33,6 +33,18 @@ async function mountForm(props = {}) {
 }
 
 describe('FormAdd', () => {
+  it('shows asterisks on required field labels', async () => {
+    const wrapper = await mountForm()
+
+    expect(wrapper.find('label[for="name"]').text()).toContain('*')
+    expect(wrapper.find('label[for="category"]').text()).toContain('*')
+    expect(wrapper.find('label[for="location"]').text()).toContain('*')
+    expect(wrapper.find('label[for="start_date"]').text()).toContain('*')
+    expect(wrapper.find('label[for="end_date"]').text()).toContain('*')
+    expect(wrapper.find('label[for="capacity"]').text()).toContain('*')
+    expect(wrapper.find('label[for="image"]').text()).not.toContain('*')
+  })
+
   it('shows validation errors and prevents submit when required fields are empty', async () => {
     const wrapper = await mountForm()
 

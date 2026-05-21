@@ -37,17 +37,17 @@
 
           <div>
             <BaseInput label="Name" id="attendee-name" v-model="form.name" type="text" placeholder="Enter Name"
-              :error="fieldError('name')" icon="pi-user" />
+              :error="fieldError('name')" icon="pi-user" required />
           </div>
 
           <div>
             <BaseInput label="Email" id="email" v-model="form.email" type="email" placeholder="Enter Email"
-              :error="fieldError('email')" icon="pi-envelope" />
+              :error="fieldError('email')" icon="pi-envelope" required />
           </div>
 
           <div>
             <BaseInput label="Mobile No" id="attendee-mobile" v-model="form.mobile_no" type="tel" icon="pi-phone"
-              placeholder="Enter Mobile Number" :error="fieldError('mobile_no')"
+              placeholder="Enter Mobile Number" :error="fieldError('mobile_no')" required
               @input="form.mobile_no = form.mobile_no.replace(/\D/g, '')" />
           </div>
 
