@@ -212,7 +212,6 @@ async function submitForm() {
 
   if (isEventFull.value) {
     generalError.value = 'Event capacity has been reached.'
-    store.showMessage('error', generalError.value)
     return
   }
 
@@ -234,22 +233,22 @@ async function submitForm() {
 
 
   } catch (error) {
-    generalError.value = getErrorMessage(error)
+    const message = getErrorMessage(error)
+    generalError.value = message
     fieldErrors.value = error.response?.data?.errors || {}
 
-    if (!fieldErrors.value.email && generalError.value === 'This email is already registered for this event.') {
+    if (!fieldErrors.value.email && message === 'This email is already registered for this event.') {
       fieldErrors.value = {
         ...fieldErrors.value,
-        email: generalError.value,
+        email: message,
       }
+      generalError.value = ''
     }
 
-    if (generalError.value === 'Event capacity has been reached.') {
+    if (message === 'Event capacity has been reached.') {
       attendeeCount.value = eventCapacity.value
       syncEventInterestCount(attendeeCount.value)
     }
-
-    store.showMessage('error', generalError.value)
   }
 
   loading.value = false
