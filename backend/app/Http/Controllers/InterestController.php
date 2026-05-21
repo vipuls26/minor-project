@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\storeInterest;
+use App\Http\Requests\StoreInterest;
 use App\Models\Event;
 use App\Models\Interest;
 
@@ -19,7 +19,7 @@ class InterestController extends Controller
         return response()->json($event->interests()->latest()->get());
     }
 
-    public function store(storeInterest $request, $eventId)
+    public function store(StoreInterest $request, $eventId)
     {
         $event = Event::findOrFail($eventId);
         $validated = $request->validated();

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-1.5">
     <label :for="id" class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-      {{ label }}
+      {{ label }}<span v-if="required" class="ml-1 text-red-600" aria-hidden="true">*</span>
     </label>
 
     <div
@@ -36,6 +36,10 @@ defineProps({
   label: {
     type: String,
     default: 'Status'
+  },
+  required: {
+    type: Boolean,
+    default: false
   },
   modelValue: {
     type: String,

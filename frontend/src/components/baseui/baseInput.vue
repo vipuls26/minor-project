@@ -1,6 +1,10 @@
 <script setup>
 defineProps({
   label: String,
+  required: {
+    type: Boolean,
+    default: false,
+  },
   modelValue: [String, Number],
   error: String,
   id: String,
@@ -19,7 +23,7 @@ defineEmits(['update:modelValue']);
 <template>
   <div class="w-full">
     <label v-if="label" :for="id" class="mb-1 block text-sm font-medium text-zinc-900 dark:text-zinc-100">
-      {{ label }}
+      {{ label }}<span v-if="required" class="ml-1 text-red-600" aria-hidden="true">*</span>
     </label>
     <div class="relative w-full">
       <div v-if="icon" class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-zinc-500 dark:text-zinc-400">
