@@ -33,7 +33,7 @@ describe('eventStore', () => {
       message: 'Request failed with status code 422',
     })
 
-    const { eventStore } = await import('@/stores/eventStore')
+    const { eventStore } = await import('@/stores/useEventStore')
     const store = eventStore()
 
     const result = await store.updateEvent(7, {
@@ -68,7 +68,7 @@ describe('eventStore', () => {
       message: 'Request failed with status code 500',
     })
 
-    const { eventStore } = await import('@/stores/eventStore')
+    const { eventStore } = await import('@/stores/useEventStore')
     const store = eventStore()
 
     await store.updateEvent(7, {

@@ -1,5 +1,5 @@
 <script setup>
-import { useThemeStore } from '@/stores/themeStore';
+import { useThemeStore } from '@/stores/useThemeStore';
 import { computed } from 'vue';
 
 const themeStore = useThemeStore();

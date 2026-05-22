@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { eventStore } from '@/stores/eventStore'
-import BaseButton from './baseButton/BaseButton.vue'
-import CalendarView from './common/CalendarView.vue'
-import FormAdd from './common/FormAdd.vue'
+import { eventStore } from '@/stores/useEventStore'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import CalendarView from '@/components/calendar/CalendarView.vue'
+import EventModal from '@/components/modals/EventModal.vue'
 
 const isFormOpen = ref(false)
 const formErrors = ref({})
@@ -83,6 +83,6 @@ async function handleCreateEvent(payload) {
     </div>
   </section>
 
-  <FormAdd :is-open="isFormOpen" mode="create" :loading="store.loading" :errors="formErrors" @close="closeForm"
+  <EventModal :is-open="isFormOpen" mode="create" :loading="store.loading" :errors="formErrors" @close="closeForm"
     @submit="handleCreateEvent" />
 </template>

@@ -114,10 +114,10 @@
 
 <script setup>
 import apiUrl from '@/api/axios'
-import { eventStore } from '@/stores/eventStore'
+import { eventStore } from '@/stores/useEventStore'
 import { computed, reactive, ref, watch } from 'vue'
 import * as yup from 'yup'
-import BaseInput from '../baseui/baseInput.vue'
+import BaseInput from '../ui/BaseInput.vue'
 
 const props = defineProps({
   isOpen: { type: Boolean, default: false },

@@ -22,7 +22,7 @@ class EventUpdate extends FormRequest
             'name' => 'required|min:3|max:150|string',
             'category' => 'required|string|in:conference,workshop,meetup,webinar,hackathon,social',
             'location' => 'required|min:3|max:120|string',
-            'start_date' => 'required|date|after:now',
+            'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'capacity' => 'required|integer|min:1',
             'status' => 'required|string|in:active,inactive',
@@ -70,9 +70,10 @@ class EventUpdate extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
+
             $eventId = $this->route('id');
 
-            if (!$eventId || !$this->filled('capacity')) {
+            if (!$eventId) {
                 return;
             }
 
@@ -82,13 +83,33 @@ class EventUpdate extends FormRequest
                 return;
             }
 
-            $newCapacity = (int) $this->input('capacity');
+            $newStartDate = strtotime($this->input('start_date'));
+            $originalStartDate = strtotime($event->start_date);
 
-            if ($newCapacity < $event->interests_count) {
-                $validator->errors()->add(
-                    'capacity',
-                    'Capacity cannot be less than the total registered users.'
-                );
+            if (
+                !(
+                    $originalStartDate < now()->timestamp &&
+                    $newStartDate === $originalStartDate
+                )
+            ) {
+                if ($newStartDate < now()->timestamp) {
+                    $validator->errors()->add(
+                        'start_date',
+                        'Event start date must be in the future.'
+                    );
+                }
+            }
+
+            if ($this->filled('capacity')) {
+
+                $newCapacity = (int) $this->input('capacity');
+
+                if ($newCapacity < $event->interests_count) {
+                    $validator->errors()->add(
+                        'capacity',
+                        'Capacity cannot be less than the total registered users.'
+                    );
+                }
             }
         });
     }

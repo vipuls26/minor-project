@@ -1,5 +1,5 @@
 import apiUrl from '@/api/axios'
-import { notify } from '@/lib/notify'
+import { notify } from '@/services/notify'
 import { defineStore } from 'pinia'
 
 export const eventStore = defineStore('eventStore', {

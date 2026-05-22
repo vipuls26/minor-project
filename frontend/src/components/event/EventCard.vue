@@ -103,12 +103,12 @@
   </BaseCard>
 </template>
 <script setup>
-import { eventStore } from '@/stores/eventStore'
-import { useThemeStore } from '@/stores/themeStore'
+import { eventStore } from '@/stores/useEventStore'
+import { useThemeStore } from '@/stores/useThemeStore'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import Swal from 'sweetalert2'
-import BaseCard from '../baseui/baseCard.vue'
-import BaseCountDown from '../baseui/baseCountDown.vue'
+import BaseCard from '../ui/BaseCard.vue'
+import BaseCountDown from '../ui/BaseCountDown.vue'
 
 const emit = defineEmits(['edit', 'attendees'])
 
