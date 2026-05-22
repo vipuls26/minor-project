@@ -1,99 +1,62 @@
 <template>
-  <BaseCard
-    class="bg-white transition-all duration-200 hover:border-indigo-400/40 dark:bg-zinc-900"
-  >
+  <BaseCard class="bg-white transition-all duration-200 hover:border-indigo-400/40 dark:bg-zinc-900">
     <div class="space-y-3.5">
-      <div
-        v-if="event.image_url"
-        class="overflow-hidden rounded-xl border border-zinc-200/80 bg-white dark:border-white/10 dark:bg-zinc-900"
-      >
-        <img
-          :src="event.image_url"
-          :alt="`${event.name} image`"
-          class="h-40 sm:h-44 w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
-        >
+      <div v-if="event.image_url"
+        class="overflow-hidden rounded-xl border border-zinc-200/80 bg-white dark:border-white/10 dark:bg-zinc-900">
+        <img :src="event.image_url" :alt="`${event.name} image`"
+          class="h-40 sm:h-44 w-full object-cover transition-transform duration-300 hover:scale-[1.02]">
       </div>
 
       <div class="flex items-start justify-between gap-4">
         <div class="flex-1 space-y-2">
           <div class="flex flex-wrap gap-2">
-            <span
-              v-for="badge in badges"
-              :key="badge.label"
-              class="rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider"
-              :class="badge.class"
-            >
+            <span v-for="badge in badges" :key="badge.label"
+              class="rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider" :class="badge.class">
               {{ badge.label }}
             </span>
           </div>
 
-          
-          <h2
-            class="line-clamp-2 text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100"
-          >
+
+          <h2 class="line-clamp-2 text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
             {{ event.name }}
           </h2>
         </div>
 
-        
+
         <div v-if="showActions" class="flex shrink-0 gap-1">
-          
-          <button
-            type="button"
-            aria-label="Manage attendees"
+
+          <button type="button" aria-label="Manage attendees"
             class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
-            :disabled="actionLoading"
-            title="Manage attendees"
-            @click="$emit('attendees', event)"
-          >
+            :disabled="actionLoading" title="Manage attendees" @click="$emit('attendees', event)">
             <i class="pi pi-users text-sm"></i>
           </button>
 
-          <button
-            type="button"
-            aria-label="Edit event"
+          <button type="button" aria-label="Edit event"
             class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
-            :disabled="actionLoading"
-            @click="$emit('edit', event)"
-          >
+            :disabled="actionLoading" @click="$emit('edit', event)">
             <i class="pi pi-pencil text-sm"></i>
           </button>
 
-          <button
-            type="button"
-            aria-label="Delete event"
+          <button type="button" aria-label="Delete event"
             class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-rose-600 focus-visible:outline-2 focus-visible:outline-rose-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-rose-400"
-            :disabled="actionLoading"
-            @click="deleteThisEvent"
-          >
+            :disabled="actionLoading" @click="deleteThisEvent">
             <i class="pi pi-trash text-sm"></i>
           </button>
         </div>
       </div>
 
-      
-      <div
-        v-if="showTimer"
-        class="flex flex-wrap items-center gap-2 text-sm"
-      >
-        <BaseCountDown
-          :target-date="event.start_date"
-          :end-date="event.end_date"
-          class="justify-start"
-        />
 
-        <span
-          v-if="countdownHelperText"
-          class="text-xs text-zinc-500 dark:text-zinc-400"
-        >
+      <div v-if="showTimer" class="flex flex-wrap items-center gap-2 text-sm">
+        <BaseCountDown :target-date="event.start_date" :end-date="event.end_date" class="justify-start" />
+
+        <span v-if="countdownHelperText" class="text-xs text-zinc-500 dark:text-zinc-400">
           {{ countdownHelperText }}
         </span>
       </div>
 
-      
+
       <div
-        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-zinc-200/80 pt-3 text-sm dark:border-white/10 sm:flex sm:flex-wrap"
-      >
+        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-zinc-200/80 pt-3 text-sm dark:border-white/10 sm:flex sm:flex-wrap">
         <span class="inline-flex items-center gap-1.5">
           <i class="pi pi-map-marker text-xs text-zinc-400 dark:text-zinc-500"></i>
           <span class="text-zinc-400 dark:text-zinc-500">
@@ -118,32 +81,21 @@
         <span class="inline-flex items-center gap-1.5">
           <i class="pi pi-ticket text-xs text-zinc-400 dark:text-zinc-500"></i>
 
-          <span
-            :class="seatsLeftClass"
-            class="text-zinc-400 dark:text-zinc-500"
-          >
+          <span :class="seatsLeftClass" class="text-zinc-400 dark:text-zinc-500">
             {{ seatsLeftLabel }}
           </span>
         </span>
 
-        <span
-          v-if="showUpdated"
-          class="inline-flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500"
-        >
+        <span v-if="showUpdated" class="inline-flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
           <i class="pi pi-refresh text-[10px]"></i>
           <span>Updated {{ formattedUpdatedDate }}</span>
         </span>
       </div>
 
-      
-      <button
-        v-if="showInterestButton"
-        type="button"
+
+      <button v-if="showInterestButton" type="button"
         class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 sm:py-2.5 text-sm font-medium text-white transition-colors hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
-        :class="interestButtonClass"
-        :disabled="isInterestDisabled"
-        @click="openInterest"
-      >
+        :class="interestButtonClass" :disabled="isInterestDisabled" @click="openInterest">
         <i :class="interestIcon"></i>
         {{ interestButtonLabel }}
       </button>

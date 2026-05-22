@@ -23,13 +23,12 @@
         </div>
 
         <form class="mt-5 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
-          <div
-            v-if="generalError"
+          <div v-if="generalError"
             class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200 md:col-span-2"
             role="alert">
             {{ generalError }}
           </div>
-        
+
           <div class="space-y-2 md:col-span-2">
             <BaseInput id="name" label="Event Name" required v-model="form.name" placeholder="Enter event name"
               icon="pi-calendar-plus" :error="fieldError('name')" />

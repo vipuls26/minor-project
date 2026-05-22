@@ -1,6 +1,7 @@
 <template>
   <Teleport to="body">
-    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 px-3 py-6 sm:px-4 sm:py-8"
+    <div v-if="isOpen"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 px-3 py-6 sm:px-4 sm:py-8"
       @click.self="emit('close')">
       <div
         class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-zinc-50 p-3 shadow-2xl dark:bg-zinc-900 sm:p-5">
@@ -22,16 +23,14 @@
         <!-- form -->
         <form v-if="canRegister" class="mt-5 grid gap-4 rounded-xl bg-zinc-50 p-3 dark:bg-zinc-900 sm:grid-cols-3"
           @submit.prevent="submitForm">
-          <div
-            v-if="showGeneralError"
+          <div v-if="showGeneralError"
             class="sm:col-span-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
-            role="alert"
-            aria-live="polite"
-          >
+            role="alert" aria-live="polite">
             {{ generalError }}
           </div>
 
-          <div v-if="isEventFull" class="sm:col-span-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
+          <div v-if="isEventFull"
+            class="sm:col-span-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
             Registration is closed because this event has reached its capacity.
           </div>
 
@@ -46,8 +45,8 @@
           </div>
 
           <div>
-            <BaseInput label="Mobile No" required id="attendee-mobile" v-model="form.mobile_no" type="tel" icon="pi-phone"
-              placeholder="Enter Mobile Number" :error="fieldError('mobile_no')"
+            <BaseInput label="Mobile No" required id="attendee-mobile" v-model="form.mobile_no" type="tel"
+              icon="pi-phone" placeholder="Enter Mobile Number" :error="fieldError('mobile_no')"
               @input="form.mobile_no = form.mobile_no.replace(/\D/g, '')" />
           </div>
 
@@ -56,7 +55,8 @@
             <button type="submit"
               class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-400 disabled:cursor-not-allowed disabled:opacity-70 sm:py-2.5"
               :disabled="loading || isEventFull">
-              <i :class="loading ? 'pi pi-spin pi-spinner text-xs' : isEventFull ? 'pi pi-lock text-xs' : 'pi pi-user-plus text-xs'" aria-hidden="true"></i>
+              <i :class="loading ? 'pi pi-spin pi-spinner text-xs' : isEventFull ? 'pi pi-lock text-xs' : 'pi pi-user-plus text-xs'"
+                aria-hidden="true"></i>
               {{ loading ? 'Saving...' : isEventFull ? 'Capacity Reached' : 'Register Attendee' }}
             </button>
           </div>
@@ -64,12 +64,9 @@
 
         <!-- table of interested people -->
         <div v-if="showTable" class="mt-6">
-          <div
-            v-if="generalError && !canRegister"
+          <div v-if="generalError && !canRegister"
             class="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
-            role="alert"
-            aria-live="polite"
-          >
+            role="alert" aria-live="polite">
             {{ generalError }}
           </div>
 
@@ -93,7 +90,7 @@
                     <div class="flex items-center gap-3">
                       <div>
                         <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ attendee.name }}</p>
-                        
+
                       </div>
                     </div>
                   </td>
