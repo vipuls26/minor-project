@@ -1,25 +1,19 @@
 <template>
-  <div
-    v-if="status === 'upcoming'"
-    class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-300"
-  >
+  <div v-if="status === 'upcoming'"
+    class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:border-indigo-500/30 dark:bg-indigo-500/10 dark:text-indigo-300">
     <slot name="icon">
       <i class="pi pi-stopwatch"></i>
     </slot>
     <span>{{ timeLeft }}</span>
   </div>
-  <div
-    v-else-if="status === 'started'"
-    class="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-300"
-  >
+  <div v-else-if="status === 'started'"
+    class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:border-indigo-500/30 dark:bg-indigo-500/10 dark:text-indigo-300">
     <slot name="started">
       <span>Live now</span>
     </slot>
   </div>
-  <div
-    v-else
-    class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-  >
+  <div v-else
+    class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
     <slot name="ended">
       <span>Ended</span>
     </slot>
@@ -79,7 +73,7 @@ const timeLeft = computed(() => {
 
   const pad = (num) => String(num).padStart(2, '0');
 
-  return days > 0 
+  return days > 0
     ? `${days}d ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
     : `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 });

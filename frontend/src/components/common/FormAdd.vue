@@ -1,89 +1,90 @@
 <template>
   <Teleport to="body">
     <div v-if="isOpen"
-      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/45 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
+      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-zinc-950/45 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
       @click.self="emit('close')">
       <div
-        class="w-full max-w-xl overflow-y-auto rounded-3xl bg-white p-4 shadow-2xl max-sm:max-h-[calc(100vh-2rem)] dark:bg-slate-900 sm:p-6 sm:max-h-[calc(100vh-3rem)]">
+        class="w-full max-w-2xl overflow-y-auto rounded-2xl bg-zinc-50 p-3 shadow-2xl max-sm:max-h-[calc(100vh-2rem)] dark:bg-zinc-900 sm:p-5 sm:max-h-[calc(100vh-3rem)]">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-500">
               {{ isEditMode ? 'Update Event' : 'New Event' }}
             </p>
-            <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
+            <h2 class="mt-2 text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
               {{ isEditMode ? 'Edit event details' : 'Add event details' }}
             </h2>
           </div>
 
           <button type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-zinc-200 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-800 dark:hover:text-zinc-100"
             @click="emit('close')">
             <i class="pi pi-times"></i>
           </button>
         </div>
 
-        <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
+        <form class="mt-5 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
           <div v-if="generalError"
-            class="md:col-span-2 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
-            role="alert" aria-live="polite">
+            class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200 md:col-span-2"
+            role="alert">
             {{ generalError }}
           </div>
 
           <div class="space-y-2 md:col-span-2">
-            <BaseInput id="name" label="Event Name" v-model="form.name" placeholder="Enter event name"
+            <BaseInput id="name" label="Event Name" required v-model="form.name" placeholder="Enter event name"
               icon="pi-calendar-plus" :error="fieldError('name')" />
 
           </div>
 
           <div class="space-y-2">
-            <BaseStatusSelect id="category" label="Category" v-model="form.category" :options="categoryOptions" />
+            <BaseStatusSelect id="category" label="Category" required v-model="form.category"
+              :options="categoryOptions" />
             <p v-if="fieldError('category')" class="mt-1 text-sm text-red-600">
               {{ fieldError('category') }}
             </p>
           </div>
 
           <div class="space-y-2">
-            <BaseInput id="location" label="Location" v-model="form.location" type="text" placeholder="Enter location"
-              :error="fieldError('location')" icon="pi-map-marker" />
+            <BaseInput id="location" label="Location" required v-model="form.location" type="text"
+              placeholder="Enter location" :error="fieldError('location')" icon="pi-map-marker" />
           </div>
 
           <div class="space-y-2">
-            <BaseInput id="start_date" label="Start Date" v-model="form.start_date" type="datetime-local"
+            <BaseInput id="start_date" label="Start Date" required v-model="form.start_date" type="datetime-local"
               :min="minimumStartDate" :error="fieldError('start_date')" icon="pi-clock" />
           </div>
 
           <div class="space-y-2">
-            <BaseInput id="end_date" label="End Date" v-model="form.end_date" type="datetime-local"
+            <BaseInput id="end_date" label="End Date" required v-model="form.end_date" type="datetime-local"
               :min="minimumEndDate" :error="fieldError('end_date')" icon="pi-clock" />
           </div>
 
           <div class="space-y-2">
-            <BaseInput id="capacity" label="Total Capacity" v-model="form.capacity" type="number" min="1" step="1"
-              :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
+            <BaseInput id="capacity" label="Total Capacity" required v-model="form.capacity" type="number" min="1"
+              step="1" :error="fieldError('capacity')" icon="pi-users" placeholder="capacity" />
           </div>
 
-          <div class="space-y-3 md:col-span-2">
-            <label for="image" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+          <div class="space-y-2 md:col-span-2">
+            <label for="image" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Event Image
             </label>
 
             <div v-if="imagePreview"
-              class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/60">
+              class="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
               <img :src="imagePreview" alt="Event preview" class="h-48 w-full object-cover">
             </div>
 
             <input id="image" ref="imageInput" type="file" accept="image/png,image/jpeg,image/webp"
-              class="block w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-xl file:border-0 file:bg-sky-50 file:px-4 file:py-2 file:font-semibold file:text-sky-700 hover:file:bg-sky-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:file:bg-sky-500/15 dark:file:text-sky-200"
+              class="block w-full rounded-xl border border-zinc-200/90 bg-zinc-50 px-4 py-2 text-sm text-zinc-900 file:mr-4 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-3 file:py-1.5 file:font-medium file:text-indigo-600 hover:file:bg-indigo-100 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100 dark:file:bg-indigo-500/15 dark:file:text-indigo-200 sm:py-2.5"
               @change="handleImageChange">
 
-            <p class="text-xs text-slate-500 dark:text-slate-400">
+            <p class="text-xs text-zinc-400 dark:text-zinc-500">
               Optional. Upload a JPG, PNG, or WEBP image up to 2 MB.
             </p>
 
             <label v-if="isEditMode && props.initialEvent?.image_url"
-              class="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+              class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
               <input v-model="form.remove_image" type="checkbox"
-                class="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 dark:border-slate-600 dark:bg-slate-800">
+                class="h-4 w-4 rounded border-zinc-200 text-indigo-600 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-900">
               Remove current image
             </label>
 
@@ -96,15 +97,18 @@
             <BaseStatusSelect id="status" v-model="form.status" />
           </div>
 
-          <div class="flex flex-col gap-3 pt-2 md:col-span-2 sm:flex-row sm:justify-end">
+          <div class="flex flex-col gap-2 pt-1 md:col-span-2 sm:flex-row sm:justify-end">
             <button type="button"
-              class="rounded-2xl border border-slate-200 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-800 sm:w-auto sm:py-2.5"
               @click="emit('close')">
+              <i class="pi pi-times text-xs" aria-hidden="true"></i>
               Cancel
             </button>
             <button type="submit"
-              class="rounded-2xl bg-sky-600 px-5 py-3 font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-70"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-400 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:py-2.5"
               :disabled="loading">
+              <i :class="loading ? 'pi pi-spin pi-spinner text-xs' : isEditMode ? 'pi pi-pencil text-xs' : 'pi pi-plus text-xs'"
+                aria-hidden="true"></i>
               {{ loading ? 'Saving...' : isEditMode ? 'Update Event' : 'Create Event' }}
             </button>
           </div>
@@ -150,7 +154,20 @@ const imagePreview = ref('')
 const isEditMode = computed(() => props.mode === 'edit')
 const minimumStartDate = computed(() => toDateTimeLocal(new Date()))
 const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
-const generalError = computed(() => props.errors.general || '')
+const generalError = computed(() => {
+  const message = formatMessage(props.errors.general || '')
+
+  if (!message) {
+    return ''
+  }
+
+  const fieldMessages = Object.values(props.errors.fields || {})
+    .flatMap((value) => (Array.isArray(value) ? value : [value]))
+    .map((value) => formatMessage(value))
+    .filter(Boolean)
+
+  return fieldMessages.includes(message) ? '' : message
+})
 const categoryOptions = [
   { label: 'Conference', value: 'conference' },
   { label: 'Workshop', value: 'workshop' },

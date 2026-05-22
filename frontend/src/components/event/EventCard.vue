@@ -1,149 +1,101 @@
 <template>
-  <BaseCard
-    class="bg-white/80 transition-all duration-200 hover:border-sky-500/30 dark:bg-slate-900/80"
-  >
-    <div class="space-y-4">
-      <div
-        v-if="event.image_url"
-        class="overflow-hidden rounded-2xl border border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-800"
-      >
-        <img
-          :src="event.image_url"
-          :alt="`${event.name} image`"
-          class="h-48 w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
-        >
+  <BaseCard class="bg-white transition-all duration-200 hover:border-indigo-400/40 dark:bg-zinc-900">
+    <div class="space-y-3.5">
+      <div v-if="event.image_url"
+        class="overflow-hidden rounded-xl border border-zinc-200/80 bg-white dark:border-white/10 dark:bg-zinc-900">
+        <img :src="event.image_url" :alt="`${event.name} image`"
+          class="h-40 sm:h-44 w-full object-cover transition-transform duration-300 hover:scale-[1.02]">
       </div>
 
       <div class="flex items-start justify-between gap-4">
         <div class="flex-1 space-y-2">
           <div class="flex flex-wrap gap-2">
-            <span
-              v-for="badge in badges"
-              :key="badge.label"
-              class="rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
-              :class="badge.class"
-            >
+            <span v-for="badge in badges" :key="badge.label"
+              class="rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider" :class="badge.class">
               {{ badge.label }}
             </span>
           </div>
 
-          
-          <h2
-            class="line-clamp-2 text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100"
-          >
+
+          <h2 class="line-clamp-2 text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
             {{ event.name }}
           </h2>
         </div>
 
-        
+
         <div v-if="showActions" class="flex shrink-0 gap-1">
-          
-          <button
-            type="button"
-            aria-label="Manage attendees"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-sky-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-sky-400"
-            :disabled="actionLoading"
-            title="Manage attendees"
-            @click="$emit('attendees', event)"
-          >
+
+          <button type="button" aria-label="Manage attendees"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
+            :disabled="actionLoading" title="Manage attendees" @click="$emit('attendees', event)">
             <i class="pi pi-users text-sm"></i>
           </button>
 
-          <button
-            type="button"
-            aria-label="Edit event"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-sky-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-sky-400"
-            :disabled="actionLoading"
-            @click="$emit('edit', event)"
-          >
+          <button type="button" aria-label="Edit event"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-indigo-500"
+            :disabled="actionLoading" @click="$emit('edit', event)">
             <i class="pi pi-pencil text-sm"></i>
           </button>
 
-          <button
-            type="button"
-            aria-label="Delete event"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-rose-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-rose-400"
-            :disabled="actionLoading"
-            @click="deleteThisEvent"
-          >
+          <button type="button" aria-label="Delete event"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-rose-600 focus-visible:outline-2 focus-visible:outline-rose-500 disabled:opacity-50 dark:hover:bg-zinc-900 dark:hover:text-rose-400"
+            :disabled="actionLoading" @click="deleteThisEvent">
             <i class="pi pi-trash text-sm"></i>
           </button>
         </div>
       </div>
 
-      
-      <div
-        v-if="showTimer"
-        class="flex flex-wrap items-center gap-2 text-sm"
-      >
-        <BaseCountDown
-          :target-date="event.start_date"
-          :end-date="event.end_date"
-          class="justify-start"
-        />
 
-        <span
-          v-if="countdownHelperText"
-          class="text-xs text-slate-400"
-        >
+      <div v-if="showTimer" class="flex flex-wrap items-center gap-2 text-sm">
+        <BaseCountDown :target-date="event.start_date" :end-date="event.end_date" class="justify-start" />
+
+        <span v-if="countdownHelperText" class="text-xs text-zinc-500 dark:text-zinc-400">
           {{ countdownHelperText }}
         </span>
       </div>
 
-      
+
       <div
-        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-slate-100 pt-3 text-sm dark:border-slate-800 sm:flex sm:flex-wrap"
-      >
+        class="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-zinc-200/80 pt-3 text-sm dark:border-white/10 sm:flex sm:flex-wrap">
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-map-marker text-xs text-slate-400"></i>
-          <span class="text-slate-600 dark:text-slate-300">
+          <i class="pi pi-map-marker text-xs text-zinc-400 dark:text-zinc-500"></i>
+          <span class="text-zinc-400 dark:text-zinc-500">
             {{ event.location }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-calendar text-xs text-slate-400"></i>
-          <span class="text-slate-600 dark:text-slate-300">
+          <i class="pi pi-calendar text-xs text-zinc-400 dark:text-zinc-500"></i>
+          <span class="text-zinc-400 dark:text-zinc-500">
             {{ formattedStartDate }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-users text-xs text-slate-400"></i>
-          <span class="text-slate-600 dark:text-slate-300">
+          <i class="pi pi-users text-xs text-zinc-400 dark:text-zinc-500"></i>
+          <span class="text-zinc-400 dark:text-zinc-500">
             {{ registrationSummary }}
           </span>
         </span>
 
         <span class="inline-flex items-center gap-1.5">
-          <i class="pi pi-ticket text-xs text-slate-400"></i>
+          <i class="pi pi-ticket text-xs text-zinc-400 dark:text-zinc-500"></i>
 
-          <span
-            :class="seatsLeftClass"
-            class="text-slate-600 dark:text-slate-300"
-          >
+          <span :class="seatsLeftClass" class="text-zinc-400 dark:text-zinc-500">
             {{ seatsLeftLabel }}
           </span>
         </span>
 
-        <span
-          v-if="showUpdated"
-          class="inline-flex items-center gap-1.5 text-xs text-slate-400"
-        >
+        <span v-if="showUpdated" class="inline-flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
           <i class="pi pi-refresh text-[10px]"></i>
           <span>Updated {{ formattedUpdatedDate }}</span>
         </span>
       </div>
 
-      
-      <button
-        v-if="showInterestButton"
-        type="button"
-        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
-        :class="interestButtonClass"
-        :disabled="isInterestDisabled"
-        @click="openInterest"
-      >
+
+      <button v-if="showInterestButton" type="button"
+        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 sm:py-2.5 text-sm font-medium text-white transition-colors hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+        :class="interestButtonClass" :disabled="isInterestDisabled" @click="openInterest">
         <i :class="interestIcon"></i>
         {{ interestButtonLabel }}
       </button>
@@ -184,12 +136,12 @@ const props = defineProps({
 })
 
 const categoryPalette = {
-  conference: 'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-500/15 dark:text-fuchsia-300',
-  workshop: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300',
-  meetup: 'bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300',
-  webinar: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/15 dark:text-indigo-300',
-  hackathon: 'bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300',
-  social: 'bg-rose-100 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300',
+  conference: 'border border-fuchsia-300/60 bg-fuchsia-50 text-fuchsia-700 dark:border-fuchsia-400/40 dark:bg-fuchsia-500/10 dark:text-fuchsia-300',
+  workshop: 'border border-emerald-300/60 bg-emerald-50 text-emerald-700 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:text-emerald-300',
+  meetup: 'border border-indigo-300/60 bg-indigo-50 text-indigo-700 dark:border-indigo-400/40 dark:bg-indigo-500/10 dark:text-indigo-300',
+  webinar: 'border border-indigo-300/60 bg-indigo-50 text-indigo-700 dark:border-indigo-400/40 dark:bg-indigo-500/10 dark:text-indigo-300',
+  hackathon: 'border border-orange-300/60 bg-orange-50 text-orange-700 dark:border-orange-400/40 dark:bg-orange-500/10 dark:text-orange-300',
+  social: 'border border-rose-300/60 bg-rose-50 text-rose-700 dark:border-rose-400/40 dark:bg-rose-500/10 dark:text-rose-300',
 }
 
 const store = eventStore()
@@ -275,7 +227,7 @@ const seatsLeftClass = computed(() => {
     return 'text-amber-600 dark:text-amber-400'
   }
 
-  return 'text-slate-600 dark:text-slate-300'
+  return 'text-zinc-500 dark:text-zinc-400'
 })
 
 const isEventFull = computed(() => {
@@ -292,10 +244,10 @@ const interestButtonClass = computed(() => {
   }
 
   if (eventStatus.value === 'started' || eventStatus.value === 'ended') {
-    return 'bg-slate-500 hover:bg-slate-500 dark:bg-slate-600 dark:hover:bg-slate-600'
+    return 'bg-zinc-500 hover:bg-zinc-500 dark:bg-zinc-700 dark:hover:bg-zinc-700'
   }
 
-  return 'bg-sky-600 hover:bg-sky-700'
+  return 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600'
 })
 
 const interestButtonLabel = computed(() => {
@@ -332,18 +284,18 @@ const statusLabel = computed(() => {
 
 const statusBadgeClass = computed(() => {
   if (isEventFull.value) {
-    return 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300'
+    return 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300'
   }
 
   if (eventStatus.value === 'started') {
-    return 'bg-violet-100 text-violet-800 dark:bg-violet-500/15 dark:text-violet-300'
+    return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300'
   }
 
   if (eventStatus.value === 'ended') {
-    return 'bg-slate-200 text-slate-700 dark:bg-slate-700/70 dark:text-slate-200'
+    return 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300'
   }
 
-  return 'bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300'
+  return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300'
 })
 
 const categoryLabel = computed(() => {

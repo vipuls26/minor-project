@@ -1,85 +1,56 @@
 <template>
-  <section
-    class="min-h-[calc(100vh-140px)] bg-slate-100 py-8 transition-colors duration-300 dark:bg-slate-950"
-  >
+  <section class="min-h-[calc(100vh-140px)] bg-white py-6 sm:py-8 transition-colors duration-300 dark:bg-zinc-950">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
       <div v-if="store.loading" class="flex justify-center py-10">
-        <i class="pi pi-spin pi-spinner text-3xl text-slate-500"></i>
+        <i class="pi pi-spin pi-spinner text-3xl text-zinc-500 dark:text-zinc-400"></i>
       </div>
 
-      <div v-else class="space-y-8">
+      <div v-else class="space-y-6 sm:space-y-8">
 
-        <div
-          v-if="upcomingEvents.length"
-          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-        >
+        <div v-if="upcomingEvents.length" class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1
-              class="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100"
-            >
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
               Upcoming Events
             </h1>
 
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
               Discover and register for upcoming events.
             </p>
           </div>
 
-          <BaseEventFilterDropdown
-            v-model="selectedFilter"
-            :options="filterOptions"
-          />
+          <BaseEventFilterDropdown v-model="selectedFilter" :options="filterOptions" />
         </div>
-        
-        <div
-          v-if="filteredEvents.length"
-          class="grid gap-6 lg:grid-cols-3"
-        >
-          <EventCard
-            v-for="event in paginatedEvents"
-            :key="event.id"
-            :event="event"
-            :show-actions="false"
-            :show-interest-button="true"
-            :show-date="false"
-            :show-timer="true"
-            @attendees="openInterestForm"
-          />
+
+        <div v-if="filteredEvents.length" class="grid gap-6 lg:grid-cols-3">
+          <EventCard v-for="event in paginatedEvents" :key="event.id" :event="event" :show-actions="false"
+            :show-interest-button="true" :show-date="false" :show-timer="true" @attendees="openInterestForm" />
         </div>
- 
-        <div
-          v-else
-          class="rounded-2xl border border-slate-200 bg-white/70 px-6 py-10 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400"
-        >
+
+        <div v-else
+          class="rounded-2xl border border-zinc-200 bg-zinc-50/90 px-6 py-10 text-center text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 dark:text-zinc-400">
           {{ emptyStateMessage }}
         </div>
-        
-        <div
-          v-if="filteredEvents.length && totalPages > 1"
-          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <p class="text-sm text-slate-500 dark:text-slate-400">
+
+        <div v-if="filteredEvents.length && totalPages > 1"
+          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">
             Page {{ currentPage }} of {{ totalPages }}
           </p>
 
-          <div class="flex items-center gap-3">
-            <button
-              type="button"
-              class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:border-sky-400 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
-              :disabled="currentPage === 1"
-              @click="goToPreviousPage"
-            >
+          <div class="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+            <button type="button"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+              :disabled="currentPage === 1" @click="goToPreviousPage">
+              <i class="pi pi-arrow-left text-xs" aria-hidden="true"></i>
               Previous
             </button>
 
-            <button
-              type="button"
-              class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:border-sky-400 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
-              :disabled="currentPage === totalPages"
-              @click="goToNextPage"
-            >
+            <button type="button"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+              :disabled="currentPage === totalPages" @click="goToNextPage">
               Next
+              <i class="pi pi-arrow-right text-xs" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -87,14 +58,9 @@
     </div>
   </section>
 
-  
-  <AttendeeModal
-    :is-open="isInterestFormOpen"
-    :event="selectedEvent"
-    :can-register="true"
-    :show-table="false"
-    @close="closeInterestForm"
-  />
+
+  <AttendeeModal :is-open="isInterestFormOpen" :event="selectedEvent" :can-register="true" :show-table="false"
+    @close="closeInterestForm" />
 </template>
 
 <script setup>

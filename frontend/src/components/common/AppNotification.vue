@@ -1,12 +1,5 @@
 <template>
-  <Toaster
-    position="top-right"
-    :theme="theme"
-    rich-colors
-    expand
-    :close-button="true"
-    :toast-options="toastOptions"
-  />
+  <Toaster position="top-right" :theme="theme" rich-colors expand :close-button="true" :toast-options="toastOptions" />
 </template>
 
 <script setup>

@@ -1,77 +1,53 @@
 <template>
-  <section
-    class="min-h-[calc(100vh-140px)] bg-slate-100 py-8 transition-colors duration-300 dark:bg-slate-950"
-  >
+  <section class="min-h-[calc(100vh-140px)] bg-white py-6 sm:py-8 transition-colors duration-300 dark:bg-zinc-950">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
       <div v-if="store.loading" class="flex justify-center py-10">
-        <i class="pi pi-spin pi-spinner text-3xl text-slate-500"></i>
+        <i class="pi pi-spin pi-spinner text-3xl text-zinc-500 dark:text-zinc-400"></i>
       </div>
 
-      <div v-else-if="store.eventsData.length" class="space-y-8">
+      <div v-else-if="store.eventsData.length" class="space-y-6 sm:space-y-8">
 
-        <div
-          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <button
-            type="button"
-            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:border-sky-400 hover:text-sky-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
-            @click="openCreateDialog"
-          >
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <button type="button"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+            @click="openCreateDialog">
             <i class="pi pi-plus"></i>
             New Event
           </button>
 
-          <BaseEventFilterDropdown
-            v-model="selectedFilter"
-            :options="filterOptions"
-          />
-        </div>
-        
-        <div class="grid gap-6 lg:grid-cols-3">
-          <EventCard
-            v-for="event in paginatedEvents"
-            :key="event.id"
-            :event="event"
-            :show-timer="false"
-            @edit="openEditDialog"
-            @attendees="openAttendeeDialog"
-          />
+          <BaseEventFilterDropdown v-model="selectedFilter" :options="filterOptions" />
         </div>
 
-        
-        <div
-          v-if="!filteredEvents.length"
-          class="rounded-2xl border border-slate-200 bg-white/70 px-6 py-10 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400"
-        >
+        <div class="grid gap-6 lg:grid-cols-3">
+          <EventCard v-for="event in paginatedEvents" :key="event.id" :event="event" :show-timer="false"
+            @edit="openEditDialog" @attendees="openAttendeeDialog" />
+        </div>
+
+
+        <div v-if="!filteredEvents.length"
+          class="rounded-2xl border border-zinc-200 bg-zinc-50/90 px-6 py-10 text-center text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 dark:text-zinc-400">
           No events found for the selected filter.
         </div>
 
-        <div
-          v-else-if="totalPages > 1"
-          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <p class="text-sm text-slate-500 dark:text-slate-400">
+        <div v-else-if="totalPages > 1" class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">
             Page {{ currentPage }} of {{ totalPages }}
           </p>
 
-          <div class="flex items-center gap-3">
-            <button
-              type="button"
-              class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:border-sky-400 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
-              :disabled="currentPage === 1"
-              @click="goToPreviousPage"
-            >
+          <div class="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+            <button type="button"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+              :disabled="currentPage === 1" @click="goToPreviousPage">
+              <i class="pi pi-arrow-left text-xs" aria-hidden="true"></i>
               Previous
             </button>
 
-            <button
-              type="button"
-              class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:border-sky-400 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-500 dark:hover:text-sky-400"
-              :disabled="currentPage === totalPages"
-              @click="goToNextPage"
-            >
+            <button type="button"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
+              :disabled="currentPage === totalPages" @click="goToNextPage">
               Next
+              <i class="pi pi-arrow-right text-xs" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -79,40 +55,22 @@
 
       <div v-else>
         <div
-          class="rounded-2xl border border-slate-200 bg-white/70 px-6 py-10 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400"
-        >
+          class="rounded-2xl border border-zinc-200 bg-zinc-50/90 px-6 py-10 text-center text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 dark:text-zinc-400">
           No events found.
         </div>
       </div>
     </div>
   </section>
 
-  <FormAdd
-    :is-open="isCreateDialogOpen"
-    mode="create"
-    :loading="store.loading"
-    :errors="formErrors"
-    @close="closeCreateDialog"
-    @submit="handleCreateEvent"
-  />
+  <FormAdd :is-open="isCreateDialogOpen" mode="create" :loading="store.loading" :errors="formErrors"
+    @close="closeCreateDialog" @submit="handleCreateEvent" />
 
-  <FormAdd
-    :is-open="isEditDialogOpen"
-    mode="edit"
-    :initial-event="selectedEvent"
-    :loading="store.loading"
-    :errors="formErrors"
-    @close="closeEditDialog"
-    @submit="handleUpdateEvent"
-  />
+  <FormAdd :is-open="isEditDialogOpen" mode="edit" :initial-event="selectedEvent" :loading="store.loading"
+    :errors="formErrors" @close="closeEditDialog" @submit="handleUpdateEvent" />
 
-  
-  <AttendeeModal
-    :is-open="isAttendeeDialogOpen"
-    :event="selectedAttendeeEvent"
-    :can-register="false"
-    @close="closeAttendeeDialog"
-  />
+
+  <AttendeeModal :is-open="isAttendeeDialogOpen" :event="selectedAttendeeEvent" :can-register="false"
+    @close="closeAttendeeDialog" />
 </template>
 
 <script setup>
