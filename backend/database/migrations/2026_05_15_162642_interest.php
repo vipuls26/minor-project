@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('interests', function (Blueprint $table) {
+        Schema::create('interests', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email');
             $table->string('mobile_no');
             $table->foreignId('event_id')->constrained('events');
             $table->timestamps();
+
+            $table->unique(['event_id', 'email']);
         });
     }
 

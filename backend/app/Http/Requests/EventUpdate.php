@@ -36,14 +36,14 @@ class EventUpdate extends FormRequest
     {
         return [
             'name.required' => 'Event name is required',
-            'name.min' => 'Event name must be more than 3 character',
+            'name.min' => 'Event name must be at least 3 characters',
             'name.max' => 'Event name not be more than 30 character',
 
             'category.required' => 'Event category is required',
             'category.in' => 'Select a valid event category',
 
             'location.required' => 'Event location is required',
-            'location.min' => 'Event location must be more than 3 character',
+            'location.min' => 'Event location must be at least 3 characters',
             'location.max' => 'Event location must not be more than 120 characters',
 
             'start_date.required' => 'Event start date is required',

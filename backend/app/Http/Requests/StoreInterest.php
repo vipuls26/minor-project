@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+
 class StoreInterest extends FormRequest
 {
     /**
@@ -22,32 +23,42 @@ class StoreInterest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|min:3|max:30|string',
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:30',
+            ],
+
             'email' => [
                 'required',
+                'string',
                 'email',
                 'max:100',
             ],
-            'mobile_no' => 'required|min:10|max:10|string',
+
+            'mobile_no' => [
+                'required',
+                'digits:10',
+            ],
         ];
     }
 
     public function messages()
     {
-        return[
+        return [
             'name.required' => 'Name is required',
+            'name.string' => 'Name must be a valid text value',
             'name.min' => 'Name must be at least 3 characters',
             'name.max' => 'Name must not exceed 30 characters',
-            'name.string' => 'Name must be in string format',
-
 
             'email.required' => 'Email is required',
+            'email.string' => 'Email must be a valid text value',
             'email.email' => 'Email must be a valid email address',
-            'email.unique' => 'Register using another email address',
+            'email.max' => 'Email must not exceed 100 characters',
 
             'mobile_no.required' => 'Mobile number is required',
-            'mobile_no.min' => 'Mobile number not more than 10 digit'
-
+            'mobile_no.digits' => 'Mobile number must be exactly 10 digits',
         ];
     }
 }
