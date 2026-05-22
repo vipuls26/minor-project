@@ -24,7 +24,7 @@ class EventStore extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|min:3|max:30|string',
+            'name' => 'required|min:3|max:150|string',
             'category' => 'required|string|in:conference,workshop,meetup,webinar,hackathon,social',
             'location' => 'required|min:3|max:120|string',
             'start_date' => 'required|date|after:now',
