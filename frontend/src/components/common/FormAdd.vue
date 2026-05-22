@@ -23,11 +23,6 @@
         </div>
 
         <form class="mt-5 grid gap-4 md:grid-cols-2" @submit.prevent="submitForm">
-          <div v-if="generalError"
-            class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200 md:col-span-2"
-            role="alert">
-            {{ generalError }}
-          </div>
 
           <div class="space-y-2 md:col-span-2">
             <BaseInput id="name" label="Event Name" required v-model="form.name" placeholder="Enter event name"
@@ -80,13 +75,6 @@
             <p class="text-xs text-zinc-400 dark:text-zinc-500">
               Optional. Upload a JPG, PNG, or WEBP image up to 2 MB.
             </p>
-
-            <label v-if="isEditMode && props.initialEvent?.image_url"
-              class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-              <input v-model="form.remove_image" type="checkbox"
-                class="h-4 w-4 rounded border-zinc-200 text-indigo-600 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-900">
-              Remove current image
-            </label>
 
             <p v-if="fieldError('image')" class="text-sm text-red-600">
               {{ fieldError('image') }}
@@ -144,7 +132,6 @@ const form = reactive({
   end_date: '',
   capacity: '',
   image: null,
-  remove_image: false,
   status: 'active',
 })
 
@@ -152,22 +139,22 @@ const localErrors = ref({})
 const imageInput = ref(null)
 const imagePreview = ref('')
 const isEditMode = computed(() => props.mode === 'edit')
-const minimumStartDate = computed(() => toDateTimeLocal(new Date()))
-const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
-const generalError = computed(() => {
-  const message = formatMessage(props.errors.general || '')
+const minimumStartDate = computed(() => {
+  if (
+    isEditMode.value &&
+    props.initialEvent?.start_date
+  ) {
+    const originalDate = toDateTimeLocal(props.initialEvent.start_date)
+    const now = toDateTimeLocal(new Date())
 
-  if (!message) {
-    return ''
+    return originalDate < now ? originalDate : now
   }
 
-  const fieldMessages = Object.values(props.errors.fields || {})
-    .flatMap((value) => (Array.isArray(value) ? value : [value]))
-    .map((value) => formatMessage(value))
-    .filter(Boolean)
-
-  return fieldMessages.includes(message) ? '' : message
+  return toDateTimeLocal(new Date())
 })
+
+const minimumEndDate = computed(() => form.start_date || minimumStartDate.value)
+
 const categoryOptions = [
   { label: 'Conference', value: 'conference' },
   { label: 'Workshop', value: 'workshop' },
@@ -179,32 +166,68 @@ const categoryOptions = [
 
 const validationSchema = yup.object({
   name: yup.string().trim().required('Event name is required'),
+
   category: yup.string().required('Category is required'),
+
   location: yup.string().trim().required('Location is required'),
-  start_date: yup
-    .string()
-    .required('Start date is required')
-    .test('is-future-date', 'Start date must be in the future', (value) => {
+
+start_date: yup
+  .string()
+  .required('Start date is required')
+  .test(
+    'valid-start-date',
+    'Start date must be in the future',
+    (value) => {
       if (!value) {
         return false
+      }
+
+      // In edit mode allow old past date
+      if (isEditMode.value) {
+        const originalStartDate = props.initialEvent?.start_date
+
+        if (originalStartDate) {
+          const originalTimestamp = new Date(originalStartDate).getTime()
+          const currentTimestamp = new Date(value).getTime()
+
+          if (originalTimestamp === currentTimestamp) {
+            return true
+          }
+
+          if (originalTimestamp < Date.now()) {
+            return true
+          }
+        }
       }
 
       return isFutureDateTime(value)
-    }),
+    },
+  ),
+
   end_date: yup
     .string()
     .required('End date is required')
-    .test('is-after-start-date', 'End date must be after the start date', (value) => {
-      if (!value) {
-        return false
-      }
+    .test(
+      'is-after-start-date',
+      'End date must be after the start date',
+      (value) => {
+        if (!value || !form.start_date) {
+          return false
+        }
 
-      if (!form.start_date) {
-        return isFutureDateTime(value)
-      }
+        // Allow unchanged old end date in edit mode
+        if (
+          isEditMode.value &&
+          props.initialEvent?.end_date &&
+          toDateTimeLocal(props.initialEvent.end_date) === value
+        ) {
+          return true
+        }
 
-      return isAfterDateTime(value, form.start_date)
-    }),
+        return isAfterDateTime(value, form.start_date)
+      },
+    ),
+
   capacity: yup
     .number()
     .typeError('Capacity must be a number')
@@ -237,9 +260,8 @@ function fillForm() {
   form.location = props.initialEvent?.location || ''
   form.start_date = toDateTimeLocal(props.initialEvent?.start_date || '')
   form.end_date = toDateTimeLocal(props.initialEvent?.end_date || '')
-  form.capacity = props.initialEvent?.capacity || '1'
+  form.capacity = props.initialEvent?.capacity ?? 1
   form.image = null
-  form.remove_image = false
   form.status = props.initialEvent?.status || 'active'
   setImagePreview(props.initialEvent?.image_url || '')
 
@@ -266,7 +288,6 @@ async function submitForm() {
     end_date: form.end_date,
     capacity: Number(form.capacity),
     image: form.image,
-    remove_image: form.remove_image,
     status: form.status,
   })
 }
@@ -276,7 +297,6 @@ function handleImageChange(event) {
   form.image = file || null
 
   if (form.image) {
-    form.remove_image = false
     setImagePreview(URL.createObjectURL(form.image))
     return
   }
@@ -356,26 +376,6 @@ function toDateTimeLocal(value) {
   const dateText = typeof value === 'string' ? value : value.toISOString()
   return dateText.replace(' ', 'T').slice(0, 16)
 }
-
-watch(
-  () => form.remove_image,
-  (shouldRemove) => {
-    if (!shouldRemove) {
-      if (!form.image) {
-        setImagePreview(props.initialEvent?.image_url || '')
-      }
-      return
-    }
-
-    form.image = null
-
-    if (imageInput.value) {
-      imageInput.value.value = ''
-    }
-
-    setImagePreview('')
-  },
-)
 
 onBeforeUnmount(() => {
   revokeImagePreview()
