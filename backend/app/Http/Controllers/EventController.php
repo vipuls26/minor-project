@@ -41,11 +41,6 @@ class EventController extends Controller
         $validated = $request->validated();
         $validated['status'] = $request['status'];
 
-        if ($request->boolean('remove_image') && $event->image_path) {
-            Storage::disk('public')->delete($event->image_path);
-            $validated['image_path'] = null;
-        }
-
         if ($request->hasFile('image')) {
             if ($event->image_path) {
                 Storage::disk('public')->delete($event->image_path);
@@ -54,7 +49,6 @@ class EventController extends Controller
             $validated['image_path'] = $request->file('image')->store('events', 'public');
         }
 
-        unset($validated['image'], $validated['remove_image']);
         $event->update($validated);
         $event->loadCount('interests');
 
