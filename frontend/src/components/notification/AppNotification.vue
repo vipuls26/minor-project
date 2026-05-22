@@ -7,7 +7,7 @@ import { computed } from 'vue'
 import { Toaster } from 'vue-sonner'
 import 'vue-sonner/style.css'
 
-import { useThemeStore } from '@/stores/themeStore'
+import { useThemeStore } from '@/stores/useThemeStore'
 
 const themeStore = useThemeStore()
 

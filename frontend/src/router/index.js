@@ -1,11 +1,11 @@
-import CalendarView from '@/components/common/CalendarView.vue'
+import CalendarView from '@/components/calendar/CalendarView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../components/HomeView.vue'),
+    component: () => import('../pages/HomeView.vue'),
   },
   {
     path: '/events',
@@ -15,7 +15,7 @@ const routes = [
   {
     path: '/upcoming-events',
     name: 'activeEvents',
-    component: () => import('../components/attendee/ActiveEventView.vue'),
+    component: () => import('../components/event/ActiveEventView.vue'),
   },
   {
     path: '/calendar',
@@ -25,7 +25,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('../components/common/NotFoundView.vue'),
+    component: () => import('../pages/NotFoundView.vue'),
   }
 ]
 

@@ -110,8 +110,8 @@
 import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import * as yup from 'yup'
 
-import BaseInput from '../baseui/baseInput.vue'
-import BaseStatusSelect from '../baseui/BaseStatusSelect.vue'
+import BaseInput from '../ui/BaseInput.vue'
+import BaseStatusSelect from '../ui/BaseStatusSelect.vue'
 
 
 const props = defineProps({

@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import AppNotification from './components/common/AppNotification.vue'
-import FooterView from './components/ui/FooterView.vue'
-import HeaderView from './components/ui/HeaderView.vue'
+import AppNotification from './components/notification/AppNotification.vue'
+import FooterView from './layouts/AppFooter.vue'
+import HeaderView from './layouts/AppHeader.vue'
 </script>

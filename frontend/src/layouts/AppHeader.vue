@@ -3,7 +3,7 @@
     class="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/85 backdrop-blur-md dark:border-white/10 dark:bg-zinc-950/80">
     <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-      <baseLogo />
+      <BaseLogo />
 
       <!-- desktop navigation -->
       <div class="hidden items-center space-x-4 md:flex">
@@ -81,8 +81,9 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import baseLogo from '../baseui/baseLogo.vue'
-import ThemeMode from '../common/ThemeMode.vue'
+
+import ThemeMode from '@/components/theme/ThemeMode.vue'
+import BaseLogo from '@/components/ui/BaseLogo.vue'
 
 const route = useRoute()
 

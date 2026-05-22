@@ -55,13 +55,13 @@
 
 <script setup>
 
-import { eventStore } from '@/stores/eventStore'
+import { eventStore } from '@/stores/useEventStore'
 import { computed, onMounted, ref, watch } from 'vue'
-import AttendeeModal from '../attendee/AttendeeModal.vue'
-import BasePagination from '../baseui/BasePagination.vue'
-import BaseEventFilterDropdown from '../baseui/BaseEventFilterDropdown.vue'
+import AttendeeModal from '../modals/AttendeeModal.vue'
+import BasePagination from '../ui/BasePagination.vue'
+import BaseEventFilterDropdown from '../ui/BaseEventFilterDropdown.vue'
 import EventCard from './EventCard.vue'
-import FormAdd from '../common/FormAdd.vue'
+import FormAdd from '../modals/EventModal.vue'
 
 
 const store = eventStore()

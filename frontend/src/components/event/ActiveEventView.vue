@@ -47,12 +47,12 @@
 </template>
 
 <script setup>
-import { eventStore } from '@/stores/eventStore'
+import { eventStore } from '@/stores/useEventStore'
 import { computed, onMounted, ref, watch } from 'vue'
-import AttendeeModal from './AttendeeModal.vue'
-import BasePagination from '../baseui/BasePagination.vue'
+import AttendeeModal from '../modals/AttendeeModal.vue'
+import BasePagination from '../ui/BasePagination.vue'
 import EventCard from '../event/EventCard.vue'
-import BaseEventFilterDropdown from '../baseui/BaseEventFilterDropdown.vue'
+import BaseEventFilterDropdown from '../ui/BaseEventFilterDropdown.vue'
 
 const store = eventStore()
 const isInterestFormOpen = ref(false)
