@@ -21,6 +21,11 @@ const routes = [
     path: '/calendar',
     name: 'calendar',
     component: CalendarView
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../components/common/NotFoundView.vue'),
   }
 ]
 
