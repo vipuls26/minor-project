@@ -32,28 +32,11 @@
           {{ emptyStateMessage }}
         </div>
 
-        <div v-if="filteredEvents.length && totalPages > 1"
-          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p class="text-sm text-zinc-500 dark:text-zinc-400">
-            Page {{ currentPage }} of {{ totalPages }}
-          </p>
-
-          <div class="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-            <button type="button"
-              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
-              :disabled="currentPage === 1" @click="goToPreviousPage">
-              <i class="pi pi-arrow-left text-xs" aria-hidden="true"></i>
-              Previous
-            </button>
-
-            <button type="button"
-              class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 sm:py-2.5 text-sm font-medium text-zinc-900 transition-colors duration-200 hover:border-indigo-600 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-indigo-500 dark:hover:text-indigo-500 sm:w-auto"
-              :disabled="currentPage === totalPages" @click="goToNextPage">
-              Next
-              <i class="pi pi-arrow-right text-xs" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
+        <BasePagination
+          v-if="filteredEvents.length && totalPages > 1"
+          v-model:currentPage="currentPage"
+          :total-pages="totalPages"
+        />
       </div>
     </div>
   </section>
@@ -67,6 +50,7 @@
 import { eventStore } from '@/stores/eventStore'
 import { computed, onMounted, ref, watch } from 'vue'
 import AttendeeModal from './AttendeeModal.vue'
+import BasePagination from '../baseui/BasePagination.vue'
 import EventCard from '../event/EventCard.vue'
 import BaseEventFilterDropdown from '../baseui/BaseEventFilterDropdown.vue'
 
@@ -173,18 +157,6 @@ function closeInterestForm() {
   selectedEvent.value = null
 }
 
-
-function goToPreviousPage() {
-  if (currentPage.value > 1) {
-    currentPage.value -= 1
-  }
-}
-
-function goToNextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value += 1
-  }
-}
 
 function startOfDay(date) {
   const value = new Date(date)
