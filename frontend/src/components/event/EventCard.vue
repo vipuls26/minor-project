@@ -110,7 +110,7 @@ import Swal from 'sweetalert2'
 import BaseCard from '../ui/BaseCard.vue'
 import BaseCountDown from '../ui/BaseCountDown.vue'
 
-const emit = defineEmits(['edit', 'attendees'])
+const emit = defineEmits(['edit', 'attendees'])   // attenddee modal send data
 
 const props = defineProps({
   event: {
@@ -147,10 +147,11 @@ const categoryPalette = {
 const store = eventStore()
 const themeStore = useThemeStore()
 const now = ref(Date.now())
-const shouldTrackTime = computed(() => props.showInterestButton || props.showTimer)
+const shouldTrackTime = computed(() => props.showTimer)  // run timer
 const actionLoading = computed(() => store.requests?.deleteEvent || false)
 let timer = null
 
+// update current time every second
 function syncNow() {
   now.value = Date.now()
 }
@@ -162,6 +163,7 @@ function stopTimer() {
   }
 }
 
+// check if timer is needed to run
 function startTimer() {
   stopTimer()
 
@@ -173,6 +175,7 @@ function startTimer() {
   timer = setInterval(syncNow, 1000)
 }
 
+// checking event if it is ended, started or upcoming
 const eventStatus = computed(() => {
   const start = new Date(props.event.start_date).getTime()
   const end = props.event.end_date ? new Date(props.event.end_date).getTime() : null
@@ -188,8 +191,13 @@ const eventStatus = computed(() => {
   return 'started'
 })
 
+// count attendee interest for event
 const attendeeCount = computed(() => Number(props.event.interests_count || 0))
+
+// count maximux seat
 const eventCapacity = computed(() => Number(props.event.capacity || 0))
+
+// check seat left for event
 const seatsLeft = computed(() => {
   if (eventCapacity.value <= 0) {
     return null
@@ -198,6 +206,7 @@ const seatsLeft = computed(() => {
   return Math.max(eventCapacity.value - attendeeCount.value, 0)
 })
 
+// showing redistration number
 const registrationSummary = computed(() => {
   if (eventCapacity.value > 0) {
     return `${attendeeCount.value} / ${eventCapacity.value}`
@@ -266,6 +275,7 @@ const interestButtonLabel = computed(() => {
   return 'Add Interest'
 })
 
+// showing event status for fully booked, started or ended
 const statusLabel = computed(() => {
   if (isEventFull.value) {
     return 'Fully Booked'
@@ -334,7 +344,7 @@ const countdownHelperText = computed(() => {
 })
 
 const formattedStartDate = computed(() => formatDate(props.event.start_date))
-const formattedCreatedDate = computed(() => formatDate(props.event.created_at))
+
 const formattedUpdatedDate = computed(() => formatDate(props.event.updated_at))
 
 const showUpdated = computed(() => {

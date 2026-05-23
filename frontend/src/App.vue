@@ -1,7 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex flex-col bg-white text-zinc-900 transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100"
-  >
+    class="min-h-screen flex flex-col bg-white text-zinc-900 transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100">
     <AppNotification />
 
     <HeaderView />

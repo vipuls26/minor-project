@@ -54,8 +54,7 @@
 </template>
 
 <script setup>
-
-import { eventStore } from '@/stores/useEventStore'
+import { useEventStore } from '@/stores/useEventStore'
 import { computed, onMounted, ref, watch } from 'vue'
 import AttendeeModal from '../modals/AttendeeModal.vue'
 import BasePagination from '../ui/BasePagination.vue'
@@ -63,8 +62,7 @@ import BaseEventFilterDropdown from '../ui/BaseEventFilterDropdown.vue'
 import EventCard from './EventCard.vue'
 import FormAdd from '../modals/EventModal.vue'
 
-
-const store = eventStore()
+const store = useEventStore()
 const isCreateDialogOpen = ref(false)
 const isEditDialogOpen = ref(false)
 const isAttendeeDialogOpen = ref(false)
@@ -82,35 +80,47 @@ const filterOptions = [
   { label: 'Next Week', value: 'next_week' },
 ]
 
-const filteredEvents = computed(() => {
+// calculate date range for today, tomorrow and next week
+function getDateRanges() {
   const now = new Date()
   const todayStart = startOfDay(now)
-  const tomorrowStart = addDays(todayStart, 1)
-  const dayAfterTomorrowStart = addDays(todayStart, 2)
-  const nextWeekStart = startOfDay(addDays(todayStart, 7))
-  const nextWeekEnd = endOfDay(addDays(todayStart, 13))
 
-  if (!selectedFilter.value || selectedFilter.value === 'all') {
-    return store.eventsData
+  return {
+    todayStart,
+    tomorrowStart: addDays(todayStart, 1),
+    dayAfterTomorrowStart: addDays(todayStart, 2),
+    nextWeekStart: startOfDay(addDays(todayStart, 7)),
+    nextWeekEnd: endOfDay(addDays(todayStart, 13)),
   }
+}
+
+// filter event based on selected filter
+function matchesSelectedFilter(eventDate, filterValue, ranges) {
+  if (!filterValue || filterValue === 'all') {
+    return true
+  }
+
+  if (filterValue === 'today') {
+    return eventDate >= ranges.todayStart && eventDate < ranges.tomorrowStart
+  }
+
+  if (filterValue === 'tomorrow') {
+    return eventDate >= ranges.tomorrowStart && eventDate < ranges.dayAfterTomorrowStart
+  }
+
+  if (filterValue === 'next_week') {
+    return eventDate >= ranges.nextWeekStart && eventDate <= ranges.nextWeekEnd
+  }
+
+  return true
+}
+
+const filteredEvents = computed(() => {
+  const ranges = getDateRanges()
 
   return store.eventsData.filter((event) => {
     const eventDate = new Date(event.start_date)
-
-    if (selectedFilter.value === 'today') {
-      return eventDate >= todayStart && eventDate < tomorrowStart
-    }
-
-    if (selectedFilter.value === 'tomorrow') {
-      return eventDate >= tomorrowStart && eventDate < dayAfterTomorrowStart
-    }
-
-    if (selectedFilter.value === 'next_week') {
-      return eventDate >= nextWeekStart && eventDate <= nextWeekEnd
-    }
-
-
-    return true
+    return matchesSelectedFilter(eventDate, selectedFilter.value, ranges)
   })
 })
 
@@ -142,7 +152,7 @@ watch(filteredEvents, (events) => {
 })
 
 onMounted(async () => {
-  store.fetchEvent()
+  store.fetchEvents()
 })
 
 function openCreateDialog() {
@@ -177,6 +187,12 @@ function closeAttendeeDialog() {
   selectedAttendeeEvent.value = null
 }
 
+function setFormErrors(result) {
+  formErrors.value = {
+    fields: result.errors,
+  }
+}
+
 async function handleUpdateEvent(payload) {
   if (!selectedEvent.value?.id) {
     return
@@ -189,10 +205,7 @@ async function handleUpdateEvent(payload) {
     return
   }
 
-  formErrors.value = {
-    general: result.message,
-    fields: result.errors,
-  }
+  setFormErrors(result)
 }
 
 async function handleCreateEvent(payload) {
@@ -204,12 +217,10 @@ async function handleCreateEvent(payload) {
     return
   }
 
-  formErrors.value = {
-    general: result.message,
-    fields: result.errors,
-  }
+  setFormErrors(result)
 }
 
+// set start of day, end of day, add day as required
 function startOfDay(date) {
   const value = new Date(date)
   value.setHours(0, 0, 0, 0)

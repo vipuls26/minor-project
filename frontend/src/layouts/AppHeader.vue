@@ -87,7 +87,6 @@ import BaseLogo from '@/components/ui/BaseLogo.vue'
 
 const route = useRoute()
 
-
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
@@ -98,7 +97,6 @@ const closeMenu = () => {
   isMenuOpen.value = false
 }
 </script>
-
 
 <style scoped>
 .fade-enter-active,
