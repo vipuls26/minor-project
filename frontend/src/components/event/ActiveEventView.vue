@@ -32,11 +32,8 @@
           {{ emptyStateMessage }}
         </div>
 
-        <BasePagination
-          v-if="filteredEvents.length && totalPages > 1"
-          v-model:currentPage="currentPage"
-          :total-pages="totalPages"
-        />
+        <BasePagination v-if="filteredEvents.length && totalPages > 1" v-model:currentPage="currentPage"
+          :total-pages="totalPages" />
       </div>
     </div>
   </section>

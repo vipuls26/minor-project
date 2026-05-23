@@ -23,11 +23,6 @@
         <!-- form -->
         <form v-if="canRegister" class="mt-5 grid gap-4 rounded-xl bg-zinc-50 p-3 dark:bg-zinc-900 sm:grid-cols-3"
           @submit.prevent="submitForm">
-          <div v-if="showGeneralError"
-            class="sm:col-span-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/70 dark:bg-rose-950/40 dark:text-rose-200"
-            role="alert" aria-live="polite">
-            {{ generalError }}
-          </div>
 
           <div v-if="isEventFull"
             class="sm:col-span-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
@@ -146,13 +141,7 @@ const eventCapacity = computed(() => Number(props.event?.capacity || 0))
 const isEventFull = computed(() => {
   return eventCapacity.value > 0 && attendeeCount.value >= eventCapacity.value
 })
-const showGeneralError = computed(() => {
-  if (!generalError.value) {
-    return false
-  }
 
-  return fieldError('email') !== generalError.value
-})
 
 const validationSchema = yup.object({
   name: yup

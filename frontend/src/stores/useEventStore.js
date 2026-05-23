@@ -1,8 +1,56 @@
 import apiUrl from '@/api/axios'
-import { notify } from '@/services/notify'
+import { notify } from '@/lib/notify'
 import { defineStore } from 'pinia'
 
-export const eventStore = defineStore('eventStore', {
+
+// check if message has valid string or not empty string
+function formatMessage(message) {
+  if (typeof message !== 'string' || message.length === 0) {
+    return message
+  }
+
+  // capitalize first letter of message
+  return message.charAt(0).toUpperCase() + message.slice(1)
+}
+
+// show notifcation message it formmatted text
+function showMessage(type, message) {
+  notify(type, formatMessage(message))
+}
+
+// show error message from api
+function getErrorMessage(error) {
+  return formatMessage(error.response?.data?.message || error.message || 'Something went wrong')
+}
+
+function getValidationErrors(error) {
+  return error.response?.data?.errors || {}
+}
+
+function hasValidationErrors(errors) {
+  return Boolean(errors && Object.keys(errors).length)
+}
+
+// form payload data
+function buildEventPayload(formData) {
+  const payload = new FormData()
+
+  payload.append('name', formData.name)
+  payload.append('category', formData.category)
+  payload.append('location', formData.location)
+  payload.append('start_date', formData.start_date)
+  payload.append('end_date', formData.end_date)
+  payload.append('capacity', String(formData.capacity))
+  payload.append('status', formData.status || 'active')
+
+  if (formData.image instanceof File) {
+    payload.append('image', formData.image)
+  }
+
+  return payload
+}
+
+export const useEventStore = defineStore('eventStore', {
   state: () => ({
     eventsData: [],
     activeEventList: [],
@@ -12,52 +60,11 @@ export const eventStore = defineStore('eventStore', {
 
   actions: {
     showMessage(type, message) {
-      notify(type, this.formatMessage(message))
+      showMessage(type, message)
     },
 
-    formatMessage(message) {
-      if (typeof message !== 'string' || !message.length) {
-        return message
-      }
-
-      return message.charAt(0).toUpperCase() + message.slice(1)
-    },
-
-    eventPayload(formData) {
-      const payload = new FormData()
-
-      payload.append('name', formData.name)
-      payload.append('category', formData.category)
-      payload.append('location', formData.location)
-      payload.append('start_date', formData.start_date)
-      payload.append('end_date', formData.end_date)
-      payload.append('capacity', String(formData.capacity))
-      payload.append('status', formData.status || 'active')
-
-      if (formData.image instanceof File) {
-        payload.append('image', formData.image)
-      }
-
-      if (formData.remove_image) {
-        payload.append('remove_image', '1')
-      }
-
-      return payload
-    },
-
-    getErrorMessage(error) {
-      return this.formatMessage(error.response?.data?.message || error.message || 'Something went wrong')
-    },
-
-    getValidationErrors(error) {
-      return error.response?.data?.errors || {}
-    },
-
-    hasValidationErrors(errors) {
-      return Boolean(errors && Object.keys(errors).length)
-    },
-
-    async fetchEvent() {
+    // fetch all event
+    async fetchEvents() {
       this.loading = true
       this.error = null
 
@@ -65,14 +72,15 @@ export const eventStore = defineStore('eventStore', {
         const response = await apiUrl.get('all')
         this.eventsData = response.data
       } catch (error) {
-        this.error = this.getErrorMessage(error)
-        this.showMessage('error', this.error)
+        this.error = getErrorMessage(error)
+        showMessage('error', this.error)
       } finally {
         this.loading = false
       }
     },
 
-    async activeEvent() {
+    // fetch active events
+    async fetchActiveEvents() {
       this.loading = true
       this.error = null
 
@@ -80,29 +88,30 @@ export const eventStore = defineStore('eventStore', {
         const response = await apiUrl.get('active')
         this.activeEventList = response.data
       } catch (error) {
-        this.error = this.getErrorMessage(error)
-        this.showMessage('error', this.error)
+        this.error = getErrorMessage(error)
+        showMessage('error', this.error)
       } finally {
         this.loading = false
       }
     },
 
+    // create new event
     async createEvent(formData) {
       this.loading = true
       this.error = null
 
       try {
-        const response = await apiUrl.post('add', this.eventPayload(formData))
+        const response = await apiUrl.post('add', buildEventPayload(formData))
         this.eventsData.unshift(response.data)
-        this.showMessage('success', 'Event created successfully')
+        showMessage('success', 'Event created successfully')
 
         return { ok: true, data: response.data }
       } catch (error) {
-        this.error = this.getErrorMessage(error)
-        const validationErrors = this.getValidationErrors(error)
+        this.error = getErrorMessage(error)
+        const validationErrors = getValidationErrors(error)
 
-        if (!this.hasValidationErrors(validationErrors)) {
-          this.showMessage('error', this.error)
+        if (!hasValidationErrors(validationErrors)) {
+          showMessage('error', this.error)
         }
 
         return {
@@ -115,25 +124,31 @@ export const eventStore = defineStore('eventStore', {
       }
     },
 
+    // update existing event
     async updateEvent(id, formData) {
       this.loading = true
       this.error = null
 
       try {
-        const response = await apiUrl.post(`edit/${id}`, this.eventPayload(formData))
+        const response = await apiUrl.post(`edit/${id}`, buildEventPayload(formData))
 
         this.eventsData = this.eventsData.map((event) => {
-          return event.id === id ? response.data : event
+          if (event.id === id) {
+            return response.data
+          }
+
+          return event
         })
 
-        this.showMessage('success', 'Event updated successfully')
+        showMessage('success', 'Event updated successfully')
+
         return { ok: true, data: response.data }
       } catch (error) {
-        this.error = this.getErrorMessage(error)
-        const validationErrors = this.getValidationErrors(error)
+        this.error = getErrorMessage(error)
+        const validationErrors = getValidationErrors(error)
 
-        if (!this.hasValidationErrors(validationErrors)) {
-          this.showMessage('error', this.error)
+        if (!hasValidationErrors(validationErrors)) {
+          showMessage('error', this.error)
         }
 
         return {
@@ -146,6 +161,7 @@ export const eventStore = defineStore('eventStore', {
       }
     },
 
+    // delete event
     async deleteEvent(id) {
       this.loading = true
       this.error = null
@@ -153,12 +169,12 @@ export const eventStore = defineStore('eventStore', {
       try {
         await apiUrl.delete(`delete/${id}`)
         this.eventsData = this.eventsData.filter((event) => event.id !== id)
-        this.showMessage('success', 'Event deleted successfully')
+        showMessage('success', 'Event deleted successfully')
 
         return { ok: true }
       } catch (error) {
-        this.error = this.getErrorMessage(error)
-        this.showMessage('error', this.error)
+        this.error = getErrorMessage(error)
+        showMessage('error', this.error)
 
         return {
           ok: false,
@@ -169,13 +185,14 @@ export const eventStore = defineStore('eventStore', {
       }
     },
 
+    // fetch interests for an event
     async fetchInterests(eventId) {
       try {
         const response = await apiUrl.get(`events/${eventId}/interests`)
         return { ok: true, data: response.data }
       } catch (error) {
-        const message = this.getErrorMessage(error)
-        this.showMessage('error', message)
+        const message = getErrorMessage(error)
+        showMessage('error', message)
         return { ok: false, message }
       }
     },
@@ -188,18 +205,28 @@ export const eventStore = defineStore('eventStore', {
           mobile_no: formData.mobile_no,
         })
 
-        this.showMessage('success', 'Attendee registered successfully')
+        showMessage('success', 'Attendee registered successfully')
         return { ok: true, data: response.data }
       } catch (error) {
-        const message = this.getErrorMessage(error)
-        this.showMessage('error', message)
+        const message = getErrorMessage(error)
+        showMessage('error', message)
 
         return {
           ok: false,
           message,
-          errors: this.getValidationErrors(error),
+          errors: getValidationErrors(error),
         }
       }
     },
+
+    fetchEvent() {
+      return this.fetchEvents()
+    },
+
+    activeEvent() {
+      return this.fetchActiveEvents()
+    },
   },
 })
+
+export const eventStore = useEventStore

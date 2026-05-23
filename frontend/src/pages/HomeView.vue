@@ -1,30 +1,35 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { eventStore } from '@/stores/useEventStore'
+import { useEventStore } from '@/stores/useEventStore'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import CalendarView from '@/components/calendar/CalendarView.vue'
 import EventModal from '@/components/modals/EventModal.vue'
 
-const isFormOpen = ref(false)
+const isCreateModalOpen = ref(false)
 const formErrors = ref({})
-const store = eventStore()
-
-
+const store = useEventStore()
 
 onMounted(() => {
   if (!store.eventsData.length) {
-    store.fetchEvent()
+    store.fetchEvents()
   }
 })
 
 function openForm() {
   formErrors.value = {}
-  isFormOpen.value = true
+  isCreateModalOpen.value = true
 }
 
 function closeForm() {
-  isFormOpen.value = false
+  isCreateModalOpen.value = false
   formErrors.value = {}
+}
+
+function setFormErrors(result) {
+  formErrors.value = {
+    general: result.message,
+    fields: result.errors,
+  }
 }
 
 async function handleCreateEvent(payload) {
@@ -35,10 +40,7 @@ async function handleCreateEvent(payload) {
     return
   }
 
-  formErrors.value = {
-    general: result.message,
-    fields: result.errors,
-  }
+  setFormErrors(result)
 }
 </script>
 
@@ -83,6 +85,6 @@ async function handleCreateEvent(payload) {
     </div>
   </section>
 
-  <EventModal :is-open="isFormOpen" mode="create" :loading="store.loading" :errors="formErrors" @close="closeForm"
-    @submit="handleCreateEvent" />
+  <EventModal :is-open="isCreateModalOpen" mode="create" :loading="store.loading" :errors="formErrors"
+    @close="closeForm" @submit="handleCreateEvent" />
 </template>

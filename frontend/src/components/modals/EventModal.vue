@@ -171,38 +171,38 @@ const validationSchema = yup.object({
 
   location: yup.string().trim().required('Location is required'),
 
-start_date: yup
-  .string()
-  .required('Start date is required')
-  .test(
-    'valid-start-date',
-    'Start date must be in the future',
-    (value) => {
-      if (!value) {
-        return false
-      }
+  start_date: yup
+    .string()
+    .required('Start date is required')
+    .test(
+      'valid-start-date',
+      'Start date must be in the future',
+      (value) => {
+        if (!value) {
+          return false
+        }
 
-      // In edit mode allow old past date
-      if (isEditMode.value) {
-        const originalStartDate = props.initialEvent?.start_date
+        // In edit mode allow old past date
+        if (isEditMode.value) {
+          const originalStartDate = props.initialEvent?.start_date
 
-        if (originalStartDate) {
-          const originalTimestamp = new Date(originalStartDate).getTime()
-          const currentTimestamp = new Date(value).getTime()
+          if (originalStartDate) {
+            const originalTimestamp = new Date(originalStartDate).getTime()
+            const currentTimestamp = new Date(value).getTime()
 
-          if (originalTimestamp === currentTimestamp) {
-            return true
-          }
+            if (originalTimestamp === currentTimestamp) {
+              return true
+            }
 
-          if (originalTimestamp < Date.now()) {
-            return true
+            if (originalTimestamp < Date.now()) {
+              return true
+            }
           }
         }
-      }
 
-      return isFutureDateTime(value)
-    },
-  ),
+        return isFutureDateTime(value)
+      },
+    ),
 
   end_date: yup
     .string()
